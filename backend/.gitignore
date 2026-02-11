@@ -1,0 +1,19 @@
+# Dependency directories
+node_modules/
+
+# Build output
+dist/
+
+# Environment variables (Crucial for your remote DB)
+.env
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Docker files (Optional: keep these unless you want to ignore them)
+# .dockerignore

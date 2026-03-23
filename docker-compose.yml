@@ -20,4 +20,4 @@ services:
       - /app/node_modules
     depends_on:
       - backend
-    command: npm run dev -- --host
+    command: npm run dev

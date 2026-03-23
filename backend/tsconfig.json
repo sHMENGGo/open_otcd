@@ -1,14 +1,18 @@
 {
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "ignoreDeprecations": "5.0",
+
     // File Layout
     // "rootDir": "./src",
     // "outDir": "./dist",
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
+    "module": "ESnext",
+    "target": "ES2023",
     "types": [],
     // For nodejs:
     // "lib": ["esnext"],

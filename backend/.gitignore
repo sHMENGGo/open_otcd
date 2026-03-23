@@ -17,3 +17,4 @@ yarn-error.log*
 
 # Docker files (Optional: keep these unless you want to ignore them)
 # .dockerignore
+/generated/prisma

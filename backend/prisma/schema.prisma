@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -10,4 +5,972 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  schemas  = ["gleif_version_0_4", "latvia", "public", "register", "slovakia", "uk_version_0_4"]
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model gleif_version_0_4_entity_annotations {
+  link                   String?   @map("_link")
+  link_entity_statement  String?   @map("_link_entity_statement")
+  motivation             String?
+  description            String?
+  statementpointertarget Boolean?
+  creationdate           DateTime? @db.Timestamp(6)
+  url                    String?
+  createdby_name         String?
+  createdby_uri          String?
+
+  @@map("entity_annotations")
+  @@ignore
+  @@schema("gleif_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model gleif_version_0_4_entity_recorddetails_addresses {
+  link                  String? @map("_link")
+  link_entity_statement String? @map("_link_entity_statement")
+  type                  String?
+  address               String?
+  postcode              String?
+  country_name          String?
+  country_code          String?
+
+  @@map("entity_recorddetails_addresses")
+  @@ignore
+  @@schema("gleif_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model gleif_version_0_4_entity_recorddetails_identifiers {
+  link                  String? @map("_link")
+  link_entity_statement String? @map("_link_entity_statement")
+  id                    String?
+  scheme                String?
+  schemename            String?
+  uri                   String?
+
+  @@map("entity_recorddetails_identifiers")
+  @@ignore
+  @@schema("gleif_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model gleif_version_0_4_entity_source_assertedby {
+  link                  String? @map("_link")
+  link_entity_statement String? @map("_link_entity_statement")
+  name                  String?
+  uri                   String?
+
+  @@map("entity_source_assertedby")
+  @@ignore
+  @@schema("gleif_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model gleif_version_0_4_entity_statement {
+  link                               String?   @map("_link")
+  statementid                        String?
+  declarationsubject                 String?
+  statementdate                      DateTime? @db.Timestamp(6)
+  recordid                           String?
+  recordstatus                       String?
+  recordtype                         String?
+  recorddetails_iscomponent          Boolean?
+  recorddetails_foundingdate         DateTime? @db.Timestamp(6)
+  recorddetails_name                 String?
+  recorddetails_uri                  String?
+  recorddetails_entitytype_type      String?
+  recorddetails_entitytype_details   String?
+  recorddetails_jurisdiction_name    String?
+  recorddetails_jurisdiction_code    String?
+  publicationdetails_publicationdate DateTime? @db.Timestamp(6)
+  publicationdetails_bodsversion     Decimal?  @db.Decimal
+  publicationdetails_license         String?
+  publicationdetails_publisher_name  String?
+  publicationdetails_publisher_url   String?
+  source_type                        String?
+  source_url                         String?
+  recorddetails_alternatenames       String?
+  recorddetails_dissolutiondate      DateTime? @db.Timestamp(6)
+
+  @@map("entity_statement")
+  @@ignore
+  @@schema("gleif_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model gleif_version_0_4_relationship_annotations {
+  link                        String?   @map("_link")
+  link_relationship_statement String?   @map("_link_relationship_statement")
+  motivation                  String?
+  description                 String?
+  statementpointertarget      Boolean?
+  creationdate                DateTime? @db.Timestamp(6)
+  createdby_name              String?
+  createdby_uri               String?
+
+  @@map("relationship_annotations")
+  @@ignore
+  @@schema("gleif_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model gleif_version_0_4_relationship_recorddetails_interests {
+  link                         String?   @map("_link")
+  link_relationship_statement  String?   @map("_link_relationship_statement")
+  directorindirect             String?
+  type                         String?
+  beneficialownershiporcontrol Boolean?
+  details                      String?
+  startdate                    DateTime? @db.Timestamp(6)
+
+  @@map("relationship_recorddetails_interests")
+  @@ignore
+  @@schema("gleif_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model gleif_version_0_4_relationship_source_assertedby {
+  link                        String? @map("_link")
+  link_relationship_statement String? @map("_link_relationship_statement")
+  name                        String?
+  uri                         String?
+
+  @@map("relationship_source_assertedby")
+  @@ignore
+  @@schema("gleif_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model gleif_version_0_4_relationship_statement {
+  link                                      String?   @map("_link")
+  statementid                               String?
+  declarationsubject                        String?
+  statementdate                             DateTime? @db.Timestamp(6)
+  recordid                                  String?
+  recordstatus                              String?
+  recordtype                                String?
+  recorddetails_subject                     String?
+  recorddetails_iscomponent                 Boolean?
+  recorddetails_interestedparty_reason      String?
+  recorddetails_interestedparty_description String?
+  publicationdetails_publicationdate        DateTime? @db.Timestamp(6)
+  publicationdetails_bodsversion            Decimal?  @db.Decimal
+  publicationdetails_license                String?
+  publicationdetails_publisher_name         String?
+  publicationdetails_publisher_url          String?
+  source_type                               String?
+  source_url                                String?
+  recorddetails_interestedparty             String?
+
+  @@map("relationship_statement")
+  @@ignore
+  @@schema("gleif_version_0_4")
+}
+
+model latvia_entity_addresses {
+  link                  String?                  @map("_link")
+  link_entity_statement String?                  @map("_link_entity_statement")
+  type                  String?
+  address               String?
+  country               String?
+  statementid           String?
+  id                    Int                      @id @default(autoincrement())
+  entity_statement      latvia_entity_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("entity_addresses")
+  @@schema("latvia")
+}
+
+model latvia_entity_identifiers {
+  link                  String?                  @map("_link")
+  link_entity_statement String?                  @map("_link_entity_statement")
+  identifier_number     String?
+  scheme                String?
+  statementid           String?
+  id                    Int                      @id @default(autoincrement())
+  entity_statement      latvia_entity_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("entity_identifiers")
+  @@schema("latvia")
+}
+
+model latvia_entity_source_assertedby {
+  link                  String?                  @map("_link")
+  link_entity_statement String?                  @map("_link_entity_statement")
+  name                  String?
+  statementid           String?
+  id                    Int                      @id @default(autoincrement())
+  entity_statement      latvia_entity_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("entity_source_assertedby")
+  @@schema("latvia")
+}
+
+model latvia_entity_statement {
+  link                                 String?                           @map("_link")
+  statementid                          String                            @id
+  statementtype                        String?
+  statementdate                        DateTime?                         @db.Timestamp(6)
+  iscomponent                          Boolean?
+  entitytype                           String?
+  name                                 String?
+  foundingdate                         DateTime?                         @db.Timestamp(6)
+  incorporatedinjurisdiction_name      String?
+  incorporatedinjurisdiction_code      String?
+  publicationdetails_publicationdate   DateTime?                         @db.Timestamp(6)
+  publicationdetails_bodsversion       String?
+  publicationdetails_license           String?
+  publicationdetails_publisher_name    String?
+  publicationdetails_publisher_url     String?
+  source_type                          String?
+  unspecifiedentitydetails_reason      String?
+  unspecifiedentitydetails_description String?
+  entity_addresses                     latvia_entity_addresses[]
+  entity_identifiers                   latvia_entity_identifiers[]
+  entity_source_assertedby             latvia_entity_source_assertedby[]
+
+  @@map("entity_statement")
+  @@schema("latvia")
+}
+
+model latvia_ooc_interests {
+  link                         String?               @map("_link")
+  link_ooc_statement           String?               @map("_link_ooc_statement")
+  type                         String?
+  interestlevel                String?
+  beneficialownershiporcontrol Boolean?
+  details                      String?
+  share_exact                  Decimal?              @db.Decimal
+  statementid                  String?
+  id                           Int                   @id @default(autoincrement())
+  ooc_statement                latvia_ooc_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("ooc_interests")
+  @@schema("latvia")
+}
+
+model ooc_source_assertedby {
+  link               String?               @map("_link")
+  link_ooc_statement String?               @map("_link_ooc_statement")
+  name               String?
+  statementid        String?
+  id                 Int                   @id @default(autoincrement())
+  ooc_statement      latvia_ooc_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@schema("latvia")
+}
+
+model latvia_ooc_statement {
+  link                                       String?                 @map("_link")
+  statementid                                String                  @id
+  statementtype                              String?
+  statementdate                              DateTime?               @db.Timestamp(6)
+  iscomponent                                Boolean?
+  subject_describedbyentitystatement         String?
+  interestedparty_describedbypersonstatement String?
+  publicationdetails_publicationdate         DateTime?               @db.Timestamp(6)
+  publicationdetails_bodsversion             String?
+  publicationdetails_license                 String?
+  publicationdetails_publisher_name          String?
+  publicationdetails_publisher_url           String?
+  source_type                                String?
+  interestedparty_describedbyentitystatement String?
+  componentstatementids                      String?
+  interestedparty_unspecified_reason         String?
+  interestedparty_unspecified_description    String?
+  ooc_interests                              latvia_ooc_interests[]
+  ooc_source_assertedby                      ooc_source_assertedby[]
+
+  @@map("ooc_statement")
+  @@schema("latvia")
+}
+
+model latvia_person_addresses {
+  link                  String?                  @map("_link")
+  link_person_statement String?                  @map("_link_person_statement")
+  type                  String?
+  country               String?
+  statementid           String?
+  id                    Int                      @id @default(autoincrement())
+  person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("person_addresses")
+  @@schema("latvia")
+}
+
+model latvia_person_identifiers {
+  link                  String?                  @map("_link")
+  link_person_statement String?                  @map("_link_person_statement")
+  identifier_number     String?
+  scheme                String?
+  statementid           String?
+  id                    Int                      @id @default(autoincrement())
+  person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("person_identifiers")
+  @@schema("latvia")
+}
+
+model latvia_person_names {
+  link                  String?                  @map("_link")
+  link_person_statement String?                  @map("_link_person_statement")
+  type                  String?
+  fullname              String?
+  familyname            String?
+  givenname             String?
+  statementid           String?
+  id                    Int                      @id @default(autoincrement())
+  person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("person_names")
+  @@schema("latvia")
+}
+
+model latvia_person_nationalities {
+  link                  String?                  @map("_link")
+  link_person_statement String?                  @map("_link_person_statement")
+  name                  String?
+  code                  String?
+  statementid           String?
+  id                    Int                      @id @default(autoincrement())
+  person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("person_nationalities")
+  @@schema("latvia")
+}
+
+model latvia_person_source_assertedby {
+  link                  String?                  @map("_link")
+  link_person_statement String?                  @map("_link_person_statement")
+  name                  String?
+  statementid           String?
+  id                    Int                      @id @default(autoincrement())
+  person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("person_source_assertedby")
+  @@schema("latvia")
+}
+
+model latvia_person_statement {
+  link                               String?                           @map("_link")
+  statementid                        String                            @id
+  statementtype                      String?
+  statementdate                      DateTime?                         @db.Timestamp(6)
+  iscomponent                        Boolean?
+  persontype                         String?
+  birthdate                          String?
+  publicationdetails_publicationdate DateTime?                         @db.Timestamp(6)
+  publicationdetails_bodsversion     String?
+  publicationdetails_license         String?
+  publicationdetails_publisher_name  String?
+  publicationdetails_publisher_url   String?
+  source_type                        String?
+  unspecifiedpersondetails_reason    String?
+  person_addresses                   latvia_person_addresses[]
+  person_identifiers                 latvia_person_identifiers[]
+  person_names                       latvia_person_names[]
+  person_nationalities               latvia_person_nationalities[]
+  person_source_assertedby           latvia_person_source_assertedby[]
+
+  @@map("person_statement")
+  @@schema("latvia")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model register_entity_addresses {
+  link                  String? @map("_link")
+  link_entity_statement String? @map("_link_entity_statement")
+  address               String?
+  country               String?
+  type                  String?
+
+  @@map("entity_addresses")
+  @@ignore
+  @@schema("register")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model register_entity_identifiers {
+  link                  String? @map("_link")
+  link_entity_statement String? @map("_link_entity_statement")
+  id                    String?
+  scheme                String?
+  schemename            String?
+  uri                   String?
+
+  @@map("entity_identifiers")
+  @@ignore
+  @@schema("register")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model register_entity_statement {
+  link                               String?   @map("_link")
+  statementtype                      String?
+  entitytype                         String?
+  foundingdate                       DateTime? @db.Timestamp(6)
+  statementid                        String?
+  statementdate                      DateTime? @db.Timestamp(6)
+  iscomponent                        Boolean?
+  name                               String?
+  incorporatedinjurisdiction_code    String?
+  incorporatedinjurisdiction_name    String?
+  publicationdetails_bodsversion     Decimal?  @db.Decimal
+  publicationdetails_license         String?
+  publicationdetails_publicationdate DateTime? @db.Timestamp(6)
+  publicationdetails_publisher_name  String?
+  publicationdetails_publisher_url   String?
+  dissolutiondate                    DateTime? @db.Timestamp(6)
+  replacesstatements                 String?
+  alternatenames                     String?
+  source_assertedby                  Boolean?
+  source_description                 String?
+  source_retrievedat                 DateTime? @db.Timestamp(6)
+  source_type                        String?
+  source_url                         String?
+
+  @@map("entity_statement")
+  @@ignore
+  @@schema("register")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model register_ooc_interests {
+  link                   String?   @map("_link")
+  link_ooc_statement     String?   @map("_link_ooc_statement")
+  type                   String?
+  startdate              DateTime? @db.Timestamp(6)
+  share_exact            String?
+  share_maximum          String?
+  share_minimum          String?
+  enddate                DateTime? @db.Timestamp(6)
+  details                String?
+  share_exclusivemaximum Boolean?
+  share_exclusiveminimum Boolean?
+
+  @@map("ooc_interests")
+  @@ignore
+  @@schema("register")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model register_ooc_statement {
+  link                                       String?   @map("_link")
+  statementtype                              String?
+  statementdate                              DateTime? @db.Timestamp(6)
+  iscomponent                                Boolean?
+  statementid                                String?
+  interestedparty_describedbypersonstatement String?
+  publicationdetails_bodsversion             Decimal?  @db.Decimal
+  publicationdetails_license                 String?
+  publicationdetails_publicationdate         DateTime? @db.Timestamp(6)
+  publicationdetails_publisher_name          String?
+  publicationdetails_publisher_url           String?
+  source_assertedby                          Boolean?
+  source_description                         String?
+  source_retrievedat                         DateTime? @db.Timestamp(6)
+  source_type                                String?
+  source_url                                 String?
+  subject_describedbyentitystatement         String?
+  interestedparty_describedbyentitystatement String?
+
+  @@map("ooc_statement")
+  @@ignore
+  @@schema("register")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model register_person_addresses {
+  link                  String? @map("_link")
+  link_person_statement String? @map("_link_person_statement")
+  address               String?
+  country               String?
+  type                  String?
+
+  @@map("person_addresses")
+  @@ignore
+  @@schema("register")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model register_person_identifiers {
+  link                  String? @map("_link")
+  link_person_statement String? @map("_link_person_statement")
+  id                    String?
+  schemename            String?
+  uri                   String?
+
+  @@map("person_identifiers")
+  @@ignore
+  @@schema("register")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model register_person_names {
+  link                  String? @map("_link")
+  link_person_statement String? @map("_link_person_statement")
+  fullname              String?
+  type                  String?
+  familyname            String?
+  givenname             String?
+
+  @@map("person_names")
+  @@ignore
+  @@schema("register")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model register_person_nationalities {
+  link                  String? @map("_link")
+  link_person_statement String? @map("_link_person_statement")
+  code                  String?
+  name                  String?
+
+  @@map("person_nationalities")
+  @@ignore
+  @@schema("register")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model register_person_statement {
+  link                               String?   @map("_link")
+  statementtype                      String?
+  iscomponent                        Boolean?
+  statementid                        String?
+  persontype                         String?
+  statementdate                      DateTime? @db.Timestamp(6)
+  publicationdetails_bodsversion     Decimal?  @db.Decimal
+  publicationdetails_license         String?
+  publicationdetails_publicationdate DateTime? @db.Timestamp(6)
+  publicationdetails_publisher_name  String?
+  publicationdetails_publisher_url   String?
+  source_assertedby                  Boolean?
+  source_description                 String?
+  source_retrievedat                 DateTime? @db.Timestamp(6)
+  source_type                        String?
+  source_url                         String?
+  replacesstatements                 String?
+  birthdate                          DateTime? @db.Timestamp(6)
+
+  @@map("person_statement")
+  @@ignore
+  @@schema("register")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model slovakia_entity_addresses {
+  link                  String? @map("_link")
+  link_entity_statement String? @map("_link_entity_statement")
+  address               String?
+  country               String?
+  type                  String?
+
+  @@map("entity_addresses")
+  @@ignore
+  @@schema("slovakia")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model slovakia_entity_identifiers {
+  link                  String? @map("_link")
+  link_entity_statement String? @map("_link_entity_statement")
+  id                    String?
+  scheme                String?
+  schemename            String?
+  uri                   String?
+
+  @@map("entity_identifiers")
+  @@ignore
+  @@schema("slovakia")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model slovakia_entity_statement {
+  link                               String?   @map("_link")
+  statementtype                      String?
+  entitytype                         String?
+  foundingdate                       DateTime? @db.Timestamp(6)
+  statementid                        String?
+  statementdate                      DateTime? @db.Timestamp(6)
+  iscomponent                        Boolean?
+  name                               String?
+  incorporatedinjurisdiction_code    String?
+  incorporatedinjurisdiction_name    String?
+  publicationdetails_bodsversion     Decimal?  @db.Decimal
+  publicationdetails_license         String?
+  publicationdetails_publicationdate DateTime? @db.Timestamp(6)
+  publicationdetails_publisher_name  String?
+  publicationdetails_publisher_url   String?
+  dissolutiondate                    DateTime? @db.Timestamp(6)
+  replacesstatements                 String?
+  alternatenames                     String?
+
+  @@map("entity_statement")
+  @@ignore
+  @@schema("slovakia")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model slovakia_ooc_statement {
+  link                                       String?   @map("_link")
+  statementtype                              String?
+  statementdate                              DateTime? @db.Timestamp(6)
+  iscomponent                                Boolean?
+  statementid                                String?
+  interestedparty_describedbypersonstatement String?
+  publicationdetails_bodsversion             Decimal?  @db.Decimal
+  publicationdetails_license                 String?
+  publicationdetails_publicationdate         DateTime? @db.Timestamp(6)
+  publicationdetails_publisher_name          String?
+  publicationdetails_publisher_url           String?
+  source_assertedby                          Boolean?
+  source_description                         String?
+  source_retrievedat                         DateTime? @db.Timestamp(6)
+  source_type                                String?
+  source_url                                 String?
+  subject_describedbyentitystatement         String?
+
+  @@map("ooc_statement")
+  @@ignore
+  @@schema("slovakia")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model slovakia_person_addresses {
+  link                  String? @map("_link")
+  link_person_statement String? @map("_link_person_statement")
+  address               String?
+  country               String?
+  type                  String?
+
+  @@map("person_addresses")
+  @@ignore
+  @@schema("slovakia")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model slovakia_person_identifiers {
+  link                  String? @map("_link")
+  link_person_statement String? @map("_link_person_statement")
+  id                    String?
+  schemename            String?
+  uri                   String?
+
+  @@map("person_identifiers")
+  @@ignore
+  @@schema("slovakia")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model slovakia_person_names {
+  link                  String? @map("_link")
+  link_person_statement String? @map("_link_person_statement")
+  fullname              String?
+  type                  String?
+
+  @@map("person_names")
+  @@ignore
+  @@schema("slovakia")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model slovakia_person_nationalities {
+  link                  String? @map("_link")
+  link_person_statement String? @map("_link_person_statement")
+  code                  String?
+  name                  String?
+
+  @@map("person_nationalities")
+  @@ignore
+  @@schema("slovakia")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model slovakia_person_statement {
+  link                               String?   @map("_link")
+  statementtype                      String?
+  birthdate                          DateTime? @db.Timestamp(6)
+  statementid                        String?
+  iscomponent                        Boolean?
+  statementdate                      DateTime? @db.Timestamp(6)
+  persontype                         String?
+  publicationdetails_bodsversion     Decimal?  @db.Decimal
+  publicationdetails_license         String?
+  publicationdetails_publicationdate DateTime? @db.Timestamp(6)
+  publicationdetails_publisher_name  String?
+  publicationdetails_publisher_url   String?
+  source_assertedby                  Boolean?
+  source_description                 String?
+  source_retrievedat                 DateTime? @db.Timestamp(6)
+  source_type                        String?
+  source_url                         String?
+
+  @@map("person_statement")
+  @@ignore
+  @@schema("slovakia")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model uk_version_0_4_entity_annotations {
+  link                   String?   @map("_link")
+  link_entity_statement  String?   @map("_link_entity_statement")
+  motivation             String?
+  description            String?
+  statementpointertarget Boolean?
+  creationdate           DateTime? @db.Timestamp(6)
+  url                    String?
+  createdby_name         String?
+  createdby_uri          String?
+
+  @@map("entity_annotations")
+  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model uk_version_0_4_entity_recorddetails_addresses {
+  link                  String? @map("_link")
+  link_entity_statement String? @map("_link_entity_statement")
+  type                  String?
+  address               String?
+  postcode              String?
+  country_name          String?
+  country_code          String?
+
+  @@map("entity_recorddetails_addresses")
+  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model uk_version_0_4_entity_recorddetails_identifiers {
+  link                  String? @map("_link")
+  link_entity_statement String? @map("_link_entity_statement")
+  id                    String?
+  scheme                String?
+  schemename            String?
+  uri                   String?
+
+  @@map("entity_recorddetails_identifiers")
+  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model uk_version_0_4_entity_source_assertedby {
+  link                  String? @map("_link")
+  link_entity_statement String? @map("_link_entity_statement")
+  name                  String?
+  uri                   String?
+
+  @@map("entity_source_assertedby")
+  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model uk_version_0_4_entity_statement {
+  link                                         String?   @map("_link")
+  statementid                                  String?
+  declarationsubject                           String?
+  statementdate                                DateTime? @db.Timestamp(6)
+  recordid                                     String?
+  recordstatus                                 String?
+  recordtype                                   String?
+  recorddetails_iscomponent                    Boolean?
+  recorddetails_foundingdate                   DateTime? @db.Timestamp(6)
+  recorddetails_name                           String?
+  recorddetails_entitytype_type                String?
+  recorddetails_jurisdiction_name              String?
+  recorddetails_jurisdiction_code              String?
+  recorddetails_publiclisting_haspubliclisting Boolean?
+  publicationdetails_publicationdate           DateTime? @db.Timestamp(6)
+  publicationdetails_bodsversion               Decimal?  @db.Decimal
+  publicationdetails_license                   String?
+  publicationdetails_publisher_name            String?
+  publicationdetails_publisher_url             String?
+  source_type                                  String?
+  source_url                                   String?
+  recorddetails_uri                            String?
+  recorddetails_entitytype_details             String?
+  recorddetails_alternatenames                 String?
+
+  @@map("entity_statement")
+  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model person_annotations {
+  link                   String?   @map("_link")
+  link_person_statement  String?   @map("_link_person_statement")
+  motivation             String?
+  description            String?
+  statementpointertarget Boolean?
+  creationdate           DateTime? @db.Timestamp(6)
+  createdby_name         String?
+  createdby_uri          String?
+
+  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model person_recorddetails_addresses {
+  link                  String? @map("_link")
+  link_person_statement String? @map("_link_person_statement")
+  type                  String?
+  address               String?
+  postcode              String?
+  country_name          String?
+  country_code          String?
+
+  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model person_recorddetails_names {
+  link                  String? @map("_link")
+  link_person_statement String? @map("_link_person_statement")
+  type                  String?
+  fullname              String?
+  familyname            String?
+  givenname             String?
+
+  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model person_recorddetails_nationalities {
+  link                  String? @map("_link")
+  link_person_statement String? @map("_link_person_statement")
+  name                  String?
+  code                  String?
+
+  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model person_recorddetails_taxresidencies {
+  link                  String? @map("_link")
+  link_person_statement String? @map("_link_person_statement")
+  name                  String?
+  code                  String?
+
+  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model uk_version_0_4_person_source_assertedby {
+  link                  String? @map("_link")
+  link_person_statement String? @map("_link_person_statement")
+  name                  String?
+  uri                   String?
+
+  @@map("person_source_assertedby")
+  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model uk_version_0_4_person_statement {
+  link                               String?   @map("_link")
+  statementid                        String?
+  declarationsubject                 String?
+  statementdate                      DateTime? @db.Timestamp(6)
+  recordid                           String?
+  recordstatus                       String?
+  recordtype                         String?
+  recorddetails_iscomponent          Boolean?
+  recorddetails_persontype           String?
+  recorddetails_birthdate            String?
+  publicationdetails_publicationdate DateTime? @db.Timestamp(6)
+  publicationdetails_bodsversion     Decimal?  @db.Decimal
+  publicationdetails_license         String?
+  publicationdetails_publisher_name  String?
+  publicationdetails_publisher_url   String?
+  source_type                        String?
+  source_url                         String?
+
+  @@map("person_statement")
+  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model uk_version_0_4_relationship_annotations {
+  link                        String?   @map("_link")
+  link_relationship_statement String?   @map("_link_relationship_statement")
+  motivation                  String?
+  description                 String?
+  statementpointertarget      Boolean?
+  creationdate                DateTime? @db.Timestamp(6)
+  createdby_name              String?
+  createdby_uri               String?
+
+  @@map("relationship_annotations")
+  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model uk_version_0_4_relationship_recorddetails_interests {
+  link                         String?   @map("_link")
+  link_relationship_statement  String?   @map("_link_relationship_statement")
+  directorindirect             String?
+  type                         String?
+  beneficialownershiporcontrol Boolean?
+  startdate                    DateTime? @db.Timestamp(6)
+  details                      String?
+  share_maximum                Decimal?  @db.Decimal
+  share_minimum                Decimal?  @db.Decimal
+  enddate                      DateTime? @db.Timestamp(6)
+
+  @@map("relationship_recorddetails_interests")
+  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model uk_version_0_4_relationship_source_assertedby {
+  link                        String? @map("_link")
+  link_relationship_statement String? @map("_link_relationship_statement")
+  name                        String?
+  uri                         String?
+
+  @@map("relationship_source_assertedby")
+  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model uk_version_0_4_relationship_statement {
+  link                                      String?   @map("_link")
+  statementid                               String?
+  declarationsubject                        String?
+  statementdate                             DateTime? @db.Timestamp(6)
+  recordid                                  String?
+  recordstatus                              String?
+  recordtype                                String?
+  recorddetails_subject                     String?
+  recorddetails_interestedparty             String?
+  recorddetails_iscomponent                 Boolean?
+  publicationdetails_publicationdate        DateTime? @db.Timestamp(6)
+  publicationdetails_bodsversion            Decimal?  @db.Decimal
+  publicationdetails_license                String?
+  publicationdetails_publisher_name         String?
+  publicationdetails_publisher_url          String?
+  source_type                               String?
+  source_url                                String?
+  recorddetails_interestedparty_reason      String?
+  recorddetails_interestedparty_description String?
+
+  @@map("relationship_statement")
+  @@ignore
+  @@schema("uk_version_0_4")
 }

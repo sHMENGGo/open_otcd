@@ -8,6 +8,16 @@ datasource db {
   schemas  = ["gleif_version_0_4", "latvia", "public", "register", "slovakia", "uk_version_0_4"]
 }
 
+model user {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+  email    String @unique
+  createdAt DateTime @default(now())
+
+  @@schema("public")
+}
+
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model gleif_version_0_4_entity_annotations {
   link                   String?   @map("_link")

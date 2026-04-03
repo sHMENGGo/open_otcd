@@ -1,20 +1,31 @@
 import './App.css'
-
 import Login from './pages/login'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-
+import Home from './pages/home'
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import { apiGet } from './utils/api'
+import { useEffect } from 'react'
 
 function App() {
+	const navigate = useNavigate()
+
+	useEffect(() => {
+		apiGet('/verifyToken').then(data => {
+			if (data.user) {
+				console.log("User is logged in:", data.user.username)
+				navigate('/home', {replace: true})
+			}
+			else {console.log("No user logged in")}
+		})
+	}, [])
 	
 	
 	return (
-		<main className='w-svw h-svh relative'>
-			<Router>
-				<Routes>
-					<Route path="/login" element={<Login />} />
-					<Route path="/" element={<Navigate to="/login"/>} />
-				</Routes>
-			</Router>
+		<main className='w-svw h-svh flex relative' >
+			<Routes>
+				<Route path="/login" element={<Login />} />
+				<Route path="/" element={<Navigate to="/login"/>} />
+				<Route path="/home" element={<Home />} />
+			</Routes>
 		</main>
 	)
 }

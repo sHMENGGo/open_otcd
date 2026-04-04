@@ -22,16 +22,6 @@ app.get('/', (req, res) => {
 // Start Server
 app.listen(3001, () => {console.log(`🚀 Server ready at http://localhost:3001`)})
 
-declare global {
-  namespace Express {
-    interface Request {
-      // You can make this whatever type your decoded token is. 
-      // jwt.JwtPayload is the standard object type returned by jsonwebtoken.
-      user?: string | jwt.JwtPayload; 
-    }
-  }
-}
-
 // ==========================================================================================
 
 // Create a PostgreSQL connection pool
@@ -52,7 +42,7 @@ async function checkConnection() {
 
 // ==========================================================================================
 
-function verifyToken(req: express.Request, res: express.Response, next: express.NextFunction) {
+function verifyToken(req: any, res: any, next: any) {
 	const token = req.cookies.accessToken
 	if (!token) return res.status(200).json({ error: 'No token provided' })
 	try {
@@ -66,7 +56,7 @@ function verifyToken(req: express.Request, res: express.Response, next: express.
 }
 
 // Login 
-app.post('/api/login', async (req, res) => {
+app.post('/api/post/login', async (req, res) => {
 	const { username, password } = req.body
 	try {
 		const user = await prisma.user.findUnique({where: {username}})
@@ -82,13 +72,13 @@ app.post('/api/login', async (req, res) => {
 		
 		res.status(200).json({successLogin: true})
 	} catch (err) {
-		console.error("Error fetching user:", err)
+		console.error("Error fetching user from database:", err)
 		res.status(500).json({ error: 'Internal Server Error' })
 	}
 })
 
 // Logout
-app.get('/api/logout', (req, res) => {
+app.get('/api/get/logout', (req, res) => {
 	try {
 		res.clearCookie('accessToken', {
 			httpOnly: true,
@@ -103,9 +93,9 @@ app.get('/api/logout', (req, res) => {
 })
 
 // Verify if current user is logged in
-app.get('/api/verifyToken', verifyToken, async (req, res)=> {
+app.get('/api/get/verifyToken', verifyToken, async (req, res)=> {
 	try {
-		const currentToken = req.user as jwt.JwtPayload
+		const currentToken = (req as any).user
 		const currentUser = await prisma.user.findUnique({where: {id: currentToken.id}})
 		res.status(200).json({message: "User is logged in", user: currentUser || null})
 	} catch (err) {
@@ -114,3 +104,14 @@ app.get('/api/verifyToken', verifyToken, async (req, res)=> {
 	}
 })
 
+// Get data of latvia person by name
+app.get('/api/get/latvia-person', verifyToken, async (req, res) => {
+	try {
+		const persons = await prisma.latvia_person_names.findMany({take:40, include: {person_statement: true}})
+		res.status(200).json({persons})
+		console.log("Fetched persons:", persons? persons : "No persons found")
+	} catch (err) {
+		console.error("Error fetching data from database:", err)
+		res.status(500).json({ error: 'Failed to fetch data  from database. Internal Server Error' })
+	}
+})

@@ -14,13 +14,16 @@ function App() {
 				console.log("User is logged in:", data.user.username)
 				navigate('/home', {replace: true})
 			}
-			else {console.log("No user logged in")}
+			else {
+				console.log("No user logged in")
+				navigate('/login', {replace: true})
+			}
 		})
 	}, [])
 	
 	
 	return (
-		<main className='w-svw h-svh flex relative' >
+		<main className='w-screen overflow-hidden h-screen' >
 			<Routes>
 				<Route path="/login" element={<Login />} />
 				<Route path="/" element={<Navigate to="/login"/>} />

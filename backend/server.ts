@@ -104,14 +104,17 @@ app.get('/api/get/verifyToken', verifyToken, async (req, res)=> {
 	}
 })
 
-// Get data of latvia person by name
-app.get('/api/get/latvia-person', verifyToken, async (req, res) => {
+// Search
+app.post('/api/post/search', verifyToken, async (req, res) => {
+	const { searchInput } = req.body
 	try {
-		const persons = await prisma.latvia_person_names.findMany({take:40, include: {person_statement: true}})
-		res.status(200).json({persons})
-		console.log("Fetched persons:", persons? persons : "No persons found")
+		const result = await prisma.latvia_person_names.findMany({
+			where: {fullname: { contains: searchInput, mode: 'insensitive' }},
+			take: 50
+		})
+		res.status(200).json({ result })
 	} catch (err) {
-		console.error("Error fetching data from database:", err)
-		res.status(500).json({ error: 'Failed to fetch data  from database. Internal Server Error' })
+		console.error("Error during search:", err)
+		res.status(500).json({ error: 'Search database failed. Internal Server Error' })
 	}
 })

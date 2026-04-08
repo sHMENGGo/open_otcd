@@ -1,10 +1,10 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 
-export default function Dashboard() {
+export default function Home() {
     const [showMenu, setShowMenu] = useState(false)
-	const [selectedMenu, setSelectedMenu] = useState("ownership")
 
     return (
         <>
@@ -17,22 +17,14 @@ export default function Dashboard() {
 
 			{showMenu && (
 				<section className='w-1/4 absolute top-1/5 right-0 bg-neutral-950 gap-5 p-5 flex flex-col items-center justify-center' >
-					<a href="#" onClick={()=> setSelectedMenu("news")}  className='text-xl text-gray-300'>News Scraper coming soon...</a>
-					<a href="#" onClick={()=> setSelectedMenu("ownership")}  className='text-xl text-gray-300'>Open Ownership</a>
+					<Link to="/news" className='text-xl text-gray-300'>News Scraper</Link>
+					<a href="#" className='text-xl text-gray-300'>Open Ownership</a>
 				</section>
 			)}
 
-			{selectedMenu === "ownership" && (
-				<section className='w-full h-4/5 flex items-center justify-center' >
-					<h1 className='text-4xl text-gray-300'>Open Ownership Data coming soon...</h1>
-				</section>
-			)}
-
-			{selectedMenu === "news" && (
-				<section className='w-full h-4/5 flex items-center justify-center' >
-					<h1 className='text-4xl text-gray-300'>News Scraper coming soon...</h1>
-				</section>
-			)}
+			<section className='w-full h-4/5 flex items-center justify-center' >
+				<h1 className='text-4xl text-gray-300'>Open Ownership Data coming soon...</h1>
+			</section>
 		</>
     )
 }

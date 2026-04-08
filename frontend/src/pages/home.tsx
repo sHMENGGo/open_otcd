@@ -24,25 +24,24 @@ export default function Home() {
 	const [searchInput, setSearchInput] = useState("")
 	const [searchResults, setSearchResults] = useState<Record<string, any>[]>([])
 	function search(e: any) {
-		if(e.key === "Enter") {
+		if(e.key === "Enter" || e.type === "click") {
 			console.log("Search for:", searchInput)
 			apiPost('/search', {searchInput}).then(data => {
 				console.log("Search data:", data)
 				if(data.result) setSearchResults(data.result)
 			})
-			setSearchInput("")
 		}
 	}
 
 	return (
 		<main className='h-full w-full relative' >
 			{/* Header */}
-			<section className='w-full h-1/5 flex justify-around items-center bg-linear-to-b from-gray-500 to-black' >
+			<section className='w-full h-[15%] flex justify-around items-center bg-linear-to-b from-gray-500 to-black' >
 				<img src="./src/assets/react.svg" alt='' className='h-[60%]' />
 				{/* Search Input */}
 				<div className='relative w-2/3 h-2/5 flex items-center' >
-					<FontAwesomeIcon icon={faMagnifyingGlass} className='absolute text-2xl text-gray-500 right-5' />
-					<input type="text" value={searchInput} onChange={(e)=> setSearchInput(e.target.value)} onKeyDown={(e)=> search(e)} placeholder='Search...'  className='border border-gray-500 h-full w-full rounded-full p-1 px-5 text-2xl bg-black'  />
+					<FontAwesomeIcon icon={faMagnifyingGlass} onClick={(e) => search(e)}  className='absolute text-2xl text-gray-500 right-5 hover:text-gray-300 active:scale-90' />
+					<input type="text" value={searchInput} onChange={(e)=> setSearchInput(e.target.value)} onKeyDown={(e)=> search(e)} placeholder='Search...'  className='border border-gray-500 outline-0 h-full w-full rounded-full p-2 px-5 text-xl bg-black'  />
 				</div>
 				<FontAwesomeIcon icon={faBars} onClick={()=> setShowMenu(!showMenu)}  className='text-4xl cursor-pointer hover:scale-105' />
 					{showMenu && (

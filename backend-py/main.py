@@ -63,3 +63,5 @@ def main():
                                 is_threat = True
                                 break
                         cur.execute("""INSERT INTO news_article (title, link, published_date, is_threat, source) VALUES (%s, %s, %s, %s, %s)""", (title, link, published, is_threat, source_name))
+                except Exception as e:
+                    print(f"Error processing feed {source_name}: {e}")

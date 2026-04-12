@@ -8,11 +8,18 @@ datasource db {
   schemas  = ["gleif_version_0_4", "latvia", "public", "register", "slovakia", "uk_version_0_4"]
 }
 
+model testTable {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  @@schema("public")
+}
+
 model user {
-  id       Int    @id @default(autoincrement())
-  username String @unique
-  password String
-  email    String @unique
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  email     String   @unique
   createdAt DateTime @default(now())
 
   @@schema("public")
@@ -188,6 +195,7 @@ model latvia_entity_addresses {
   id                    Int                      @id @default(autoincrement())
   entity_statement      latvia_entity_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_entity_addresses_statementid")
   @@map("entity_addresses")
   @@schema("latvia")
 }
@@ -201,6 +209,7 @@ model latvia_entity_identifiers {
   id                    Int                      @id @default(autoincrement())
   entity_statement      latvia_entity_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_entity_identifiers_statementid")
   @@map("entity_identifiers")
   @@schema("latvia")
 }
@@ -213,6 +222,7 @@ model latvia_entity_source_assertedby {
   id                    Int                      @id @default(autoincrement())
   entity_statement      latvia_entity_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_entity_source_assertedby_statementid")
   @@map("entity_source_assertedby")
   @@schema("latvia")
 }
@@ -256,6 +266,7 @@ model latvia_ooc_interests {
   id                           Int                   @id @default(autoincrement())
   ooc_statement                latvia_ooc_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_ooc_interests_statementid")
   @@map("ooc_interests")
   @@schema("latvia")
 }
@@ -268,6 +279,7 @@ model ooc_source_assertedby {
   id                 Int                   @id @default(autoincrement())
   ooc_statement      latvia_ooc_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_ooc_source_assertedby_statementid")
   @@schema("latvia")
 }
 
@@ -305,6 +317,7 @@ model latvia_person_addresses {
   id                    Int                      @id @default(autoincrement())
   person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_person_addresses_statementid")
   @@map("person_addresses")
   @@schema("latvia")
 }
@@ -318,6 +331,7 @@ model latvia_person_identifiers {
   id                    Int                      @id @default(autoincrement())
   person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_person_identifiers_statementid")
   @@map("person_identifiers")
   @@schema("latvia")
 }
@@ -333,6 +347,9 @@ model latvia_person_names {
   id                    Int                      @id @default(autoincrement())
   person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([fullname], map: "idx_person_names_fullname")
+  @@index([fullname(ops: raw("gin_trgm_ops"))], map: "idx_person_names_fullname_gin", type: Gin)
+  @@index([statementid], map: "idx_person_names_statementid")
   @@map("person_names")
   @@schema("latvia")
 }
@@ -346,6 +363,7 @@ model latvia_person_nationalities {
   id                    Int                      @id @default(autoincrement())
   person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_person_nationalities_statementid")
   @@map("person_nationalities")
   @@schema("latvia")
 }
@@ -358,6 +376,7 @@ model latvia_person_source_assertedby {
   id                    Int                      @id @default(autoincrement())
   person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_person_source_assertedby_statementid")
   @@map("person_source_assertedby")
   @@schema("latvia")
 }

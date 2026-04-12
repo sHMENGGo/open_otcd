@@ -6,11 +6,13 @@ export default function Login() {
 	const [username, setUsername] = useState("")
 	const [password, setPassword] = useState("")
 	const navigate = useNavigate()
+	const [loggingIn, setLoggingIn] = useState("LOGIN")
 
 
 	function login(username: string, password: string) {
+		setLoggingIn("LOGGING IN...")
 		apiPost('/login', {username, password}).then(data => {
-			if (data.successLogin) {navigate('/home', {replace: true}); console.log("Login successful!")}
+			if (data.successLogin) {navigate('/home', {replace: true}); console.log("Login successful!"); setLoggingIn("LOGIN")}
 		})
 	}
 
@@ -20,7 +22,7 @@ export default function Login() {
 				<h1 className="text-4xl font-bold" >LOGIN</h1>
 				<input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username..." className="border rounded-lg p-2 w-full" />
 				<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password..." className="border rounded-lg p-2 w-full" />
-				<input type="submit" value="LOGIN" onClick={()=> login(username, password)}  className="bg-blue-500 w-full text-white p-2 rounded-lg hover:bg-blue-400 font-bold" />
+				<input type="submit" value={loggingIn} onClick={()=> login(username, password)}  className="bg-blue-500 w-full text-white p-2 rounded-lg hover:bg-blue-400 font-bold active:scale-90" />
 			</section>
 
 		</main>

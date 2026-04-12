@@ -10,7 +10,7 @@ services:
     volumes:
       - ./backend/:/app
       - /app/node_modules
-    command: npm run dev
+    command: pnpm dev
 
   frontend:
     build: 
@@ -24,7 +24,7 @@ services:
       - /app/node_modules
     depends_on:
       - backend
-    command: npm run dev
+    command: pnpm dev
 
   scraper_service:
     build: 

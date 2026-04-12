@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  schemas  = ["gleif_version_0_4", "latvia", "public", "register", "slovakia", "uk_version_0_4"]
+  schemas  = ["gleif_version_0_4", "latvia", "public", "register", "scraper_service", "slovakia", "uk_version_0_4"]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -178,6 +178,7 @@ model latvia_entity_addresses {
   id                    Int                      @id @default(autoincrement())
   entity_statement      latvia_entity_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_entity_addresses_statementid")
   @@map("entity_addresses")
   @@schema("latvia")
 }
@@ -191,6 +192,7 @@ model latvia_entity_identifiers {
   id                    Int                      @id @default(autoincrement())
   entity_statement      latvia_entity_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_entity_identifiers_statementid")
   @@map("entity_identifiers")
   @@schema("latvia")
 }
@@ -203,6 +205,7 @@ model latvia_entity_source_assertedby {
   id                    Int                      @id @default(autoincrement())
   entity_statement      latvia_entity_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_entity_source_assertedby_statementid")
   @@map("entity_source_assertedby")
   @@schema("latvia")
 }
@@ -246,6 +249,7 @@ model latvia_ooc_interests {
   id                           Int                   @id @default(autoincrement())
   ooc_statement                latvia_ooc_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_ooc_interests_statementid")
   @@map("ooc_interests")
   @@schema("latvia")
 }
@@ -258,6 +262,7 @@ model ooc_source_assertedby {
   id                 Int                   @id @default(autoincrement())
   ooc_statement      latvia_ooc_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_ooc_source_assertedby_statementid")
   @@schema("latvia")
 }
 
@@ -295,6 +300,7 @@ model latvia_person_addresses {
   id                    Int                      @id @default(autoincrement())
   person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_person_addresses_statementid")
   @@map("person_addresses")
   @@schema("latvia")
 }
@@ -308,6 +314,7 @@ model latvia_person_identifiers {
   id                    Int                      @id @default(autoincrement())
   person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_person_identifiers_statementid")
   @@map("person_identifiers")
   @@schema("latvia")
 }
@@ -323,6 +330,9 @@ model latvia_person_names {
   id                    Int                      @id @default(autoincrement())
   person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([fullname], map: "idx_person_names_fullname")
+  @@index([fullname(ops: raw("gin_trgm_ops"))], map: "idx_person_names_fullname_gin", type: Gin)
+  @@index([statementid], map: "idx_person_names_statementid")
   @@map("person_names")
   @@schema("latvia")
 }
@@ -336,6 +346,7 @@ model latvia_person_nationalities {
   id                    Int                      @id @default(autoincrement())
   person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_person_nationalities_statementid")
   @@map("person_nationalities")
   @@schema("latvia")
 }
@@ -348,6 +359,7 @@ model latvia_person_source_assertedby {
   id                    Int                      @id @default(autoincrement())
   person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
 
+  @@index([statementid], map: "idx_person_source_assertedby_statementid")
   @@map("person_source_assertedby")
   @@schema("latvia")
 }
@@ -973,4 +985,35 @@ model uk_version_0_4_relationship_statement {
   @@map("relationship_statement")
   @@ignore
   @@schema("uk_version_0_4")
+}
+
+model user {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  @@schema("public")
+}
+
+model testTable {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  @@schema("public")
+}
+
+model news_article {
+  case_id        Int      @id @default(autoincrement())
+  title          String
+  link           String   @unique(map: "idx_news_article_link")
+  published_date String   @db.VarChar(50)
+  is_threat      Boolean? @default(false)
+  source         String   @db.VarChar(50)
+
+  @@index([source], map: "idx_news_article_source")
+  @@index([title], map: "idx_news_article_title")
+  @@index([title(ops: raw("gin_trgm_ops"))], map: "idx_news_article_title_gin", type: Gin)
+  @@schema("scraper_service")
 }

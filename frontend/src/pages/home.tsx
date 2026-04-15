@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useDebugValue, useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { apiGet, apiPost } from '../utils/api'
@@ -38,6 +38,14 @@ export default function Home() {
 
 	// Selected schema
 	const [selectedSchema, setSelectedSchema] = useState("all")
+
+	const [searchAll, setSearchAll] = useState("anna")
+	useEffect(() => {
+		apiPost('/searchAll', {searchAll}).then(data => {
+			console.log("Search all data:", data)
+		})
+	}, [])
+
 
 	return (
 		<main className='h-full w-full relative' >

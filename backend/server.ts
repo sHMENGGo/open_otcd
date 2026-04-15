@@ -5,8 +5,7 @@ import { Pool } from 'pg'
 import { prisma } from './lib/prisma'
 import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser'
-import { stat } from 'node:fs'
-
+import { table } from 'node:console'
 // Load environment variables (for your remote DB URL)
 dotenv.config()
 
@@ -146,73 +145,47 @@ app.post('/api/post/search', verifyToken, async (req, res) => {
 })
 
 // Search the whole database
-// app.post('/api/post/globalSearch', async (req, res) => {
-//   try {
-//     // 1. Extract the search term from the request body
-//     const { searchTerm } = req.body;
+app.post('/api/post/searchAll', verifyToken, async (req, res) => {
+	const { searchAll } = req.body
+	try {
+		const [
+			latvia_person_addresses,
+			latvia_person_identifiers, 
+			latvia_person_nationalities,
+			latvia_person_source_assertedby,
+			latvia_person_names,
+			latvia_person_statement
+		] = await Promise.all([
+			prisma.latvia_person_addresses.findMany({where: {country: { contains: searchAll, mode: 'insensitive' }}}),
+			prisma.latvia_person_identifiers.findMany({where: {identifier_number: { contains: searchAll, mode: 'insensitive' }}}),
+			prisma.latvia_person_nationalities.findMany({where: {name: { contains: searchAll, mode: 'insensitive' }}}),
+			prisma.latvia_person_source_assertedby.findMany({where: {name: { contains: searchAll, mode: 'insensitive' }}}),
+			prisma.latvia_person_names.findMany({where: {fullname: { contains: searchAll, mode: 'insensitive' }}}),
+			prisma.latvia_person_statement.findMany({where: { OR: [
+				{statementtype: { contains: searchAll, mode: 'insensitive' }},
+				{persontype: { contains: searchAll, mode: 'insensitive' }},
+				{birthdate: { contains: searchAll, mode: 'insensitive' }},
+				{publicationdetails_bodsversion: { contains: searchAll, mode: 'insensitive' }},
+				{publicationdetails_license: { contains: searchAll, mode: 'insensitive' }},
+				{publicationdetails_publisher_name: { contains: searchAll, mode: 'insensitive' }},
+				{publicationdetails_publisher_url: { contains: searchAll, mode: 'insensitive' }},
+				{source_type: { contains: searchAll, mode: 'insensitive' }},
+				{unspecifiedpersondetails_reason: { contains: searchAll, mode: 'insensitive' }},
+			]}})
+		])
 
-//     // 2. Validate input: Ensure the search term exists and is a string
-//     if (!searchTerm || typeof searchTerm !== 'string') {
-//       return res.status(400).json({ 
-//         error: 'Bad Request', 
-//         message: 'A valid "searchTerm" string is required in the request body.' 
-//       });
-//     }
+		const result = []
 
-//     // 3. Get all model names straight from your Prisma schema
-//     const models = Prisma.dmmf.datamodel.models;
-
-//     // 4. Generate the array of Prisma Promises
-//     const searchPromises = models.map((model) => {
-//       const delegateName = model.name.charAt(0).toLowerCase() + model.name.slice(1);
-
-//       const stringFields = model.fields
-//         .filter(field => field.type === 'String' && !field.isList)
-//         .map(field => field.name);
-
-//       if (stringFields.length === 0) return Promise.resolve(null);
-
-//       const orConditions = stringFields.map(field => ({
-//         [field]: { contains: searchTerm, mode: 'insensitive' }
-//       }));
-
-//       // @ts-ignore
-//       return prisma[delegateName].findMany({
-//         where: { OR: orConditions },
-//         take: 10 
-//       }).then(records => {
-//         return records.length > 0 ? { table: model.name, data: records } : null;
-//       }).catch(err => {
-//         console.error(`Failed on table ${model.name}:`, err);
-//         return null;
-//       });
-//     });
-
-//     // 5. Fire all generated Promises concurrently
-//     const rawResults = await Promise.all(searchPromises);
-
-//     // 6. Filter out the nulls
-//     const finalMatches = rawResults.filter(result => result !== null);
-
-//     // 7. Send the appropriate response to the client
-//     if (finalMatches.length === 0) {
-//       return res.status(404).json({ 
-//         message: "No matches found in the database.", 
-//         results: [] 
-//       });
-//     }
-
-//     return res.status(200).json({ 
-//       message: "Search successful", 
-//       results: finalMatches 
-//     });
-
-//   } catch (error) {
-//     // Catch any unexpected top-level errors
-//     console.error("Global search endpoint error:", error);
-//     return res.status(500).json({ 
-//       error: 'Internal Server Error', 
-//       message: 'Something went wrong while executing the search.' 
-//     })
-//   }
-// })
+		if (latvia_person_addresses.length > 0) result.push({ table: 'latvia_person_addresses', data: latvia_person_addresses })
+		if (latvia_person_identifiers.length > 0) result.push({ table: 'latvia_person_identifiers', data: latvia_person_identifiers })
+		if (latvia_person_nationalities.length > 0) result.push({ table: 'latvia_person_nationalities', data: latvia_person_nationalities })
+		if (latvia_person_source_assertedby.length > 0) result.push({ table: 'latvia_person_source_assertedby', data: latvia_person_source_assertedby })
+		if (latvia_person_names.length > 0) result.push({ table: 'latvia_person_names', data: latvia_person_names })
+		if (latvia_person_statement.length > 0) result.push({ table: 'latvia_person_statement', data: latvia_person_statement })
+		
+		res.status(200).json({ result })
+	} catch (err){
+		console.error("Error during search:", err)
+		res.status(500).json({ error: 'Search database failed. Internal Server Error' })
+	}
+})

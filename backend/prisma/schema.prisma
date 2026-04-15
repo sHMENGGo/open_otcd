@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  schemas  = ["gleif_version_0_4", "latvia", "public", "register", "slovakia", "uk_version_0_4"]
+  schemas  = ["gleif_version_0_4", "latvia", "public", "register", "scraper_service", "slovakia", "uk_version_0_4"]
 }
 
 model testTable {
@@ -1002,4 +1002,35 @@ model uk_version_0_4_relationship_statement {
   @@map("relationship_statement")
   @@ignore
   @@schema("uk_version_0_4")
+}
+
+model user {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  @@schema("public")
+}
+
+model testTable {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  @@schema("public")
+}
+
+model news_article {
+  case_id        Int      @id @default(autoincrement())
+  title          String
+  link           String   @unique(map: "idx_news_article_link")
+  published_date String   @db.VarChar(50)
+  is_threat      Boolean? @default(false)
+  source         String   @db.VarChar(50)
+
+  @@index([source], map: "idx_news_article_source")
+  @@index([title], map: "idx_news_article_title")
+  @@index([title(ops: raw("gin_trgm_ops"))], map: "idx_news_article_title_gin", type: Gin)
+  @@schema("scraper_service")
 }

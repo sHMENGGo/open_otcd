@@ -5,7 +5,13 @@ CREATE SCHEMA IF NOT EXISTS "gleif_version_0_4";
 CREATE SCHEMA IF NOT EXISTS "latvia";
 
 -- CreateSchema
+CREATE SCHEMA IF NOT EXISTS "public";
+
+-- CreateSchema
 CREATE SCHEMA IF NOT EXISTS "register";
+
+-- CreateSchema
+CREATE SCHEMA IF NOT EXISTS "scraper_service";
 
 -- CreateSchema
 CREATE SCHEMA IF NOT EXISTS "slovakia";
@@ -790,6 +796,94 @@ CREATE TABLE "uk_version_0_4"."relationship_statement" (
     "recorddetails_interestedparty_description" TEXT
 );
 
+<<<<<<< HEAD
+=======
+-- CreateTable
+CREATE TABLE "user" (
+    "id" SERIAL NOT NULL,
+    "username" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "user_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "testTable" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "testTable_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "scraper_service"."news_article" (
+    "case_id" SERIAL NOT NULL,
+    "title" TEXT NOT NULL,
+    "link" TEXT NOT NULL,
+    "published_date" VARCHAR(50) NOT NULL,
+    "is_threat" BOOLEAN DEFAULT false,
+    "source" VARCHAR(50) NOT NULL,
+
+    CONSTRAINT "news_article_pkey" PRIMARY KEY ("case_id")
+);
+
+-- CreateIndex
+CREATE INDEX "idx_entity_addresses_statementid" ON "latvia"."entity_addresses"("statementid");
+
+-- CreateIndex
+CREATE INDEX "idx_entity_identifiers_statementid" ON "latvia"."entity_identifiers"("statementid");
+
+-- CreateIndex
+CREATE INDEX "idx_entity_source_assertedby_statementid" ON "latvia"."entity_source_assertedby"("statementid");
+
+-- CreateIndex
+CREATE INDEX "idx_ooc_interests_statementid" ON "latvia"."ooc_interests"("statementid");
+
+-- CreateIndex
+CREATE INDEX "idx_ooc_source_assertedby_statementid" ON "latvia"."ooc_source_assertedby"("statementid");
+
+-- CreateIndex
+CREATE INDEX "idx_person_addresses_statementid" ON "latvia"."person_addresses"("statementid");
+
+-- CreateIndex
+CREATE INDEX "idx_person_identifiers_statementid" ON "latvia"."person_identifiers"("statementid");
+
+-- CreateIndex
+CREATE INDEX "idx_person_names_fullname" ON "latvia"."person_names"("fullname");
+
+-- CreateIndex
+CREATE INDEX "idx_person_names_fullname_gin" ON "latvia"."person_names" USING GIN ("fullname" gin_trgm_ops);
+
+-- CreateIndex
+CREATE INDEX "idx_person_names_statementid" ON "latvia"."person_names"("statementid");
+
+-- CreateIndex
+CREATE INDEX "idx_person_nationalities_statementid" ON "latvia"."person_nationalities"("statementid");
+
+-- CreateIndex
+CREATE INDEX "idx_person_source_assertedby_statementid" ON "latvia"."person_source_assertedby"("statementid");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_username_key" ON "user"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "idx_news_article_link" ON "scraper_service"."news_article"("link");
+
+-- CreateIndex
+CREATE INDEX "idx_news_article_source" ON "scraper_service"."news_article"("source");
+
+-- CreateIndex
+CREATE INDEX "idx_news_article_title" ON "scraper_service"."news_article"("title");
+
+-- CreateIndex
+CREATE INDEX "idx_news_article_title_gin" ON "scraper_service"."news_article" USING GIN ("title" gin_trgm_ops);
+
+>>>>>>> news_scraper
 -- AddForeignKey
 ALTER TABLE "latvia"."entity_addresses" ADD CONSTRAINT "entity_addresses_statementid_fkey" FOREIGN KEY ("statementid") REFERENCES "latvia"."entity_statement"("statementid") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
@@ -819,4 +913,7 @@ ALTER TABLE "latvia"."person_nationalities" ADD CONSTRAINT "person_nationalities
 
 -- AddForeignKey
 ALTER TABLE "latvia"."person_source_assertedby" ADD CONSTRAINT "person_source_assertedby_statementid_fkey" FOREIGN KEY ("statementid") REFERENCES "latvia"."person_statement"("statementid") ON DELETE NO ACTION ON UPDATE NO ACTION;
+<<<<<<< HEAD
 
+=======
+>>>>>>> news_scraper

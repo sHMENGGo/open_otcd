@@ -1,17 +1,21 @@
 services:
   backend:
-    build: ./backend
+    build: 
+      context: ./backend
+      network: host
     ports: 
       - "3001:3001"
     env_file: 
-      - ./backend/.env
+      - ./.env
     volumes:
       - ./backend/:/app
       - /app/node_modules
-    command: npm run dev
+    command: pnpm dev
 
   frontend:
-    build: ./frontend
+    build: 
+      context: ./frontend
+      network: host
     ports:
       - "3000:3000"
     stdin_open: true
@@ -20,4 +24,19 @@ services:
       - /app/node_modules
     depends_on:
       - backend
-    command: npm run dev
+    command: pnpm dev
+
+  scraper_service:
+    build: 
+      context: ./scraper_service
+      network: host
+    ports:
+      - "8000:8000"
+    volumes: 
+      - "./scraper_service:/app"
+    depends_on:
+      - backend
+    env_file:
+      - ./.env
+    environment:
+      - PYTHONUNBUFFERED=1

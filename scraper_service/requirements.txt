@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+apscheduler
+feedparser
+requests
+python-dotenv
+psycopg[binary]

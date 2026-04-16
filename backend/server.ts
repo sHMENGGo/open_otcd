@@ -12,14 +12,16 @@ const app = express()
 
 // Middleware
 app.use(cors({origin:"http://localhost:3000", credentials: true})) // Allows React to talk to this API
-app.use(cors()) // Allows React to talk to this API
 app.use(express.json()) // Parses incoming JSON requests
+app.listen(3001, () => {console.log('Server is running on http://localhost:3001')})
 
-app.get('/', (req, res) => {res.send('Hello! The backend is officially running.')})
 
-// ==========================================================================================
 
-const port = Number(process.env.PORT ?? 3001);
+
+
+
+// =============================== NEWS SCRAPER ==================================
+
 
 app.get('/api/news', async (req: Request, res: Response) => {
   const search = typeof req.query.search === 'string' ? req.query.search.trim() : '';
@@ -49,5 +51,7 @@ const test = async () => {
   }
 }
 test()
+
+
 
 

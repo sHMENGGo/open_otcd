@@ -1004,23 +1004,6 @@ model uk_version_0_4_relationship_statement {
   @@schema("uk_version_0_4")
 }
 
-model user {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  password  String
-  email     String   @unique
-  createdAt DateTime @default(now())
-
-  @@schema("public")
-}
-
-model testTable {
-  id   Int    @id @default(autoincrement())
-  name String
-
-  @@schema("public")
-}
-
 model news_article {
   case_id        Int      @id @default(autoincrement())
   title          String

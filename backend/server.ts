@@ -5,8 +5,7 @@ import dotenv from 'dotenv'
 import { Pool } from 'pg'; // PostgreSQL client
 import { PrismaClient } from './generated/prisma/client'
 import { prisma } from './lib/prisma'
- 
-// Load environment variables (for your remote DB URL)
+import {getNews, parseThreatFilter, parseLimit, parsePage} from './services/news-service';
 dotenv.config()
 
 const app = express()
@@ -16,39 +15,27 @@ app.use(cors({origin:"http://localhost:3000", credentials: true})) // Allows Rea
 app.use(cors()) // Allows React to talk to this API
 app.use(express.json()) // Parses incoming JSON requests
 
-app.get('/', (req, res) => {
-  res.send('Hello! The backend is officially running.')
-})
-
-// Start Server
-app.listen(3001, () => {
-  console.log(`🚀 Server ready at http://localhost:3001`)
-})
+app.get('/', (req, res) => {res.send('Hello! The backend is officially running.')})
 
 // ==========================================================================================
 
-// Create a PostgreSQL connection pool
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-})
+const port = Number(process.env.PORT ?? 3001);
+
+app.get('/api/news', async (req: Request, res: Response) => {
+  const search = typeof req.query.search === 'string' ? req.query.search.trim() : '';
+  const threatFilter = parseThreatFilter(req.query.threat);
+  const pageSize = parseLimit(req.query.pageSize ?? req.query.limit);
+  const page = parsePage(req.query.page)
 
 // Test the database connection
-async function checkConnection() {
-  try {
-    const client = await pool.connect()
-    console.log("✅ Database connection successful")
-    
-    // Optional: Run a simple query to be sure
-    const res = await client.query('SELECT NOW()')
-    console.log("Server time:", res.rows[0].now)
-
-    client.release()
-  } catch (err) {
-    console.error("❌ Database connection failed:", err)
-  } finally {
-    await pool.end()
+try {
+    const result = await getNews({ search, threatFilter, page, pageSize });
+    res.json(result);
+  } catch (error) {
+    console.error("Error fetching news:", error);
+    res.status(500).json({ message: 'Failed to fetch scraped news.' });
   }
-} checkConnection()
+})
 
 // ==========================================================================================
 

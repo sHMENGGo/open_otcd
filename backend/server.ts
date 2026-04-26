@@ -88,6 +88,8 @@ app.post('/api/post/latvia', verifyToken, async (req, res) => {
 	try {
 		const people = await prisma.latvia_person_names.findMany({
 			where: {fullname: { contains: searchInput, mode: 'insensitive' }},
+			omit: {link: true, link_person_statement: true, givenname: true, familyname: true},
+			take: 20,
 			include: {
 				person_statement: {
 					omit: {link: true},
@@ -111,11 +113,9 @@ app.post('/api/post/latvia', verifyToken, async (req, res) => {
 								}
 							}
 						}
-					},
+					}
 				}
-			},
-			omit: {link: true, id:true, link_person_statement: true, givenname: true, familyname: true},
-			take: 20
+			}
 		})
 		if(!people || people.length === 0) return res.status(401).json({result: [], message: "No results found"})
 
@@ -151,43 +151,32 @@ app.post('/api/post/slovakia', verifyToken, async (req, res) => {
 	const { searchInput } = req.body
 	try {
 		const people = await prisma.slovakia_person_names.findMany({
-  where: { 
-    fullname: { 
-      contains: searchInput, 
-      mode: 'insensitive' 
-    } 
-  },
-  take: 10, // Translated from LIMIT 10
-  omit: { link: true, id: true, link_person_statement: true },
-  include: {
-    person_statement: {
-      omit: { link: true },
-      include: {
-        // 2. Parallel relationships for person
-        person_nationalities: { omit: { link_person_statement: true } },
-        person_addresses: { omit: { link_person_statement: true } },
-        person_identifiers: { omit: { link_person_statement: true } },
-        
-        // 3. OOC statement
-        ooc_statement: {
-          omit: { interestedparty_describedbypersonstatement: true, subject_describedbyentitystatement: true },
-          include: {
-            
-            // 4. Entity statement
-            entity_statement: {
-              omit: { link: true },
-              include: {
-                // 5. Parallel relationships for entity
-                entity_addresses: { omit: { link_entity_statement: true } },
-                entity_identifiers: { omit: { link_entity_statement: true } },
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-});
+  			where: {fullname: {contains: searchInput, mode: 'insensitive'}},
+  			take: 10,
+  			omit: { link: true, id: true, link_person_statement: true },
+			include: {
+				person_statement: {
+					omit: { link: true },
+					include: {
+						person_nationalities: { omit: { link_person_statement: true } },
+						person_addresses: { omit: { link_person_statement: true, } },
+						person_identifiers: { omit: { link_person_statement: true } },
+						ooc_statement: {
+							omit: { interestedparty_describedbypersonstatement: true, subject_describedbyentitystatement: true },
+							include: {
+								entity_statement: {
+									omit: { link: true },
+									include: {
+										entity_addresses: { omit: { link_entity_statement: true } },
+										entity_identifiers: { omit: { link_entity_statement: true } },
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
 		if(people.length === 0) return res.status(200).json({result: [], message: "No results found"})
 
 		const result = people.flatMap(({ person_statement, ...person }) => {

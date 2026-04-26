@@ -1,4 +1,4 @@
-import { useDebugValue, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { apiGet, apiPost } from '../utils/api'
@@ -25,12 +25,17 @@ export default function Home() {
 	const [searchResults, setSearchResults] = useState<Record<string, any>[]>([])
 	function search(e: any) {
 		if(e.key === "Enter" || e.type === "click") {
-			console.log("Search for:", searchInput)
 			setLoading(true)
 			console.log("Searching...")
-			apiPost('/search', {searchInput}).then(data => {
-				console.log("Search data:", data)
-				if(data.result) setSearchResults(data.result); console.log("Search results:", data.result)
+			apiPost(`/${selectedSchema}`, {searchInput}).then(data => {
+				console.log("Search status:", data)
+				if(data?.result?.length > 0) {
+					setSearchResults(data.result)
+					console.log("Search results:", data?.result)
+				} else {
+					setSearchResults([])
+					console.log(data.message)
+				}
 				setLoading(false)
 			})
 		}
@@ -38,14 +43,6 @@ export default function Home() {
 
 	// Selected schema
 	const [selectedSchema, setSelectedSchema] = useState("all")
-
-	const [searchAll, setSearchAll] = useState("anna")
-	useEffect(() => {
-		apiPost('/searchAll', {searchAll}).then(data => {
-			console.log("Search all data:", data)
-		})
-	}, [])
-
 
 	return (
 		<main className='h-full w-full relative' >
@@ -62,8 +59,8 @@ export default function Home() {
 					{/* Menu Button */}
 					<FontAwesomeIcon icon={faBars} onClick={()=> setShowMenu(!showMenu)}  className='text-4xl cursor-pointer hover:scale-105' />
 					{showMenu && (
-						<section className='w-1/4 absolute top-1/5 right-0 bg-neutral-950 gap-5 p-5 flex flex-col items-center justify-center rounded-b-lg z-20' >
-							<button onClick={()=> {setSelectedMenu("newsScraper"); setShowMenu(false)}}  className='w-full bg-blue-950' >News Scraper coming soon...</button>
+						<section className='w-1/4 absolute top-1/5 right-0 bg-neutral-950 gap-5 p-5 flex flex-col items-center justify-center rounded-b-lg z-30' >
+							<button onClick={()=> {setSelectedMenu("newsScraper"); setShowMenu(false)}}  className='w-full bg-blue-950' >News Scraper</button>
 							<button onClick={()=> {setSelectedMenu("openOwnership"); setShowMenu(false)}}  className='w-full bg-blue-950' >Open Ownership</button>
 							<button onClick={logout}  className='w-full bg-red-950' >Logout</button>
 						</section>
@@ -71,14 +68,16 @@ export default function Home() {
 				</div>
 
 				{/* Filter Buttons */}
-				<div className="flex px-5 gap-5 *:border-neutral-600 *:hover:border-white *:active:scale-95 *:select-none *:w-1/2 *:border *:rounded *:p-2" >
-					<p onClick={()=> setSelectedSchema("all")}  className={`${selectedSchema === "all" ? "bg-blue-950" : ""}`} >All</p>
-					<p onClick={()=> setSelectedSchema("gleif")}  className={`${selectedSchema === "gleif" ? "bg-blue-950" : ""}`} >Gleif</p>
-					<p onClick={()=> setSelectedSchema("latvia")}  className={`${selectedSchema === "latvia" ? "bg-blue-950" : ""}`} >Latvia</p>
-					<p onClick={()=> setSelectedSchema("register")}  className={`${selectedSchema === "register" ? "bg-blue-950" : ""}`} >Register</p>
-					<p onClick={()=> setSelectedSchema("slovakia")}  className={`${selectedSchema === "slovakia" ? "bg-blue-950" : ""}`} >Slovakia</p>
-					<p onClick={()=> setSelectedSchema("uk")}  className={`${selectedSchema === "uk" ? "bg-blue-950" : ""}`} >UK</p>
+				{selectedMenu === "openOwnership" && (
+					<div className="flex px-5 gap-5 *:border-neutral-600 *:hover:border-white *:active:scale-95 *:select-none *:w-1/2 *:border *:rounded *:p-2" >
+						<p onClick={()=> {setSelectedSchema("all"); setSearchResults([])}}  className={`${selectedSchema === "all" ? "bg-blue-950" : ""}`} >All</p>
+						<p onClick={()=> {setSelectedSchema("gleif"); setSearchResults([])}}  className={`${selectedSchema === "gleif" ? "bg-blue-950" : ""}`} >Gleif</p>
+						<p onClick={()=> {setSelectedSchema("latvia"); setSearchResults([])}}  className={`${selectedSchema === "latvia" ? "bg-blue-950" : ""}`} >Latvia</p>
+						<p onClick={()=> {setSelectedSchema("register"); setSearchResults([])}}  className={`${selectedSchema === "register" ? "bg-blue-950" : ""}`} >Register</p>
+					<p onClick={()=> {setSelectedSchema("slovakia"); setSearchResults([])}}  className={`${selectedSchema === "slovakia" ? "bg-blue-950" : ""}`} >Slovakia</p>
+					<p onClick={()=> {setSelectedSchema("uk"); setSearchResults([])}}  className={`${selectedSchema === "uk" ? "bg-blue-950" : ""}`} >UK</p>
 				</div>
+				)}
 			</section>
 
 		{selectedMenu === "openOwnership" && (<OpenOwnership searchResults={searchResults} loading={loading} />)}

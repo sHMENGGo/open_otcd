@@ -23,7 +23,7 @@ function App() {
 	
 	
 	return (
-		<main className='w-screen overflow-hidden h-screen' >
+		<main className='w-screen  h-screen' >
 			<Routes>
 				<Route path="/login" element={<Login />} />
 				<Route path="/" element={<Navigate to="/login"/>} />

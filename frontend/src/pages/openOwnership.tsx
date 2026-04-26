@@ -14,7 +14,7 @@ export default function OpenOwnership({searchResults, loading}: {searchResults: 
 	// If no search results, display message
 	if(searchResults.length === 0) {
 		return (
-			<main className='h-full w-full flex items-center justify-center' >
+			<main className='h-4/5 w-full flex items-center justify-center' >
 				{loading ? <p className="text-3xl" >Searching...</p> : <p className="text-3xl" >Search keywords to display data</p>}
 			</main>
 		)

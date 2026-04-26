@@ -7,7 +7,7 @@ export async function apiGet(url: string) {
 		return response.data
    } catch (error) {
 		console.error("Error API getting data:", error)
-		throw error
+		return
    }
 }
 
@@ -17,6 +17,6 @@ export async function apiPost(url: string, data: any) {
 		return response.data
    } catch (error) {
 		console.error("Error API posting data:", error)
-		throw error
+		return
    }
 }

@@ -2,14 +2,16 @@ import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { apiGet, apiPost } from '../utils/api'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import NewsScraper from './newsScraper'
 import OpenOwnership from './openOwnership'
 
 export default function Home() {
 	const [showMenu, setShowMenu] = useState(false)
-	const [selectedMenu, setSelectedMenu] = useState("openOwnership")
 	const navigate = useNavigate()
+	const location = useLocation()
+	const selectedMenu =
+		location.pathname === '/newscraper' ? 'newsScraper' : 'openOwnership'
 
     function logout() {
 		apiGet('/logout').then(data => {
@@ -60,8 +62,24 @@ export default function Home() {
 					<FontAwesomeIcon icon={faBars} onClick={()=> setShowMenu(!showMenu)}  className='text-4xl cursor-pointer hover:scale-105' />
 					{showMenu && (
 						<section className='w-1/4 absolute top-1/5 right-0 bg-neutral-950 gap-5 p-5 flex flex-col items-center justify-center rounded-b-lg z-30' >
-							<button onClick={()=> {setSelectedMenu("newsScraper"); setShowMenu(false)}}  className='w-full bg-blue-950' >News Scraper</button>
-							<button onClick={()=> {setSelectedMenu("openOwnership"); setShowMenu(false)}}  className='w-full bg-blue-950' >Open Ownership</button>
+							<button
+								onClick={() => {
+									navigate('/newscraper')
+									setShowMenu(false)
+								}}
+								className="w-full bg-blue-950"
+							>
+								News Scraper
+							</button>
+							<button
+								onClick={() => {
+									navigate('/home')
+									setShowMenu(false)
+								}}
+								className="w-full bg-blue-950"
+							>
+								Open Ownership
+							</button>
 							<button onClick={logout}  className='w-full bg-red-950' >Logout</button>
 						</section>
 					)}
@@ -80,7 +98,9 @@ export default function Home() {
 				)}
 			</section>
 
-		{selectedMenu === "openOwnership" && (<OpenOwnership searchResults={searchResults} loading={loading} />)}
+		{selectedMenu === "openOwnership" && (
+			<OpenOwnership searchResults={searchResults} loading={loading} registry={selectedSchema} />
+		)}
 		{selectedMenu === "newsScraper" && (<NewsScraper />)}	
 		</main>
 	)

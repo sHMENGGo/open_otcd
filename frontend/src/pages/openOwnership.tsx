@@ -1,6 +1,17 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { pickEntityStatementId } from "../utils/pickEntityStatementId"
 
-export default function OpenOwnership({searchResults, loading}: {searchResults: Record<string, any>[], loading: boolean}) {
+export default function OpenOwnership({
+	searchResults,
+	loading,
+	registry,
+}: {
+	searchResults: Record<string, any>[]
+	loading: boolean
+	registry: string
+}) {
+	const navigate = useNavigate()
 
 	// Get keys of search results for table headers
 	const [resultKeys, setResultKeys] = useState<string[]>([])
@@ -31,15 +42,51 @@ export default function OpenOwnership({searchResults, loading}: {searchResults: 
 					</tr>
 				</thead>
 				<tbody>
-					{!loading && searchResults.map((result) => (
-						<tr key={result.id} className="border-b border-neutral-700 hover:bg-neutral-600" >
-							{!loading && resultKeys.map((key) => (
-								<td key={key} className="text-center px-5 py-2 border-r border-neutral-700" >
-									{result[key as keyof typeof result] || "N/A"}
-								</td>
-							))}
-						</tr>
-					))}
+					{!loading &&
+						searchResults.map((result, rowIndex) => {
+							const entityStatementId = pickEntityStatementId(result as Record<string, unknown>)
+							const rowKey = `${result.id ?? rowIndex}-${entityStatementId ?? ""}`
+							return (
+								<tr
+									key={rowKey}
+									role="button"
+									tabIndex={0}
+									className={`border-b border-neutral-700 hover:bg-neutral-600 ${
+										entityStatementId ? "cursor-pointer" : "cursor-default opacity-80"
+									}`}
+									onClick={() => {
+										if (!entityStatementId) return
+										navigate("/ownership/graph", {
+											state: {
+												registry,
+												entityStatementId,
+											},
+										})
+									}}
+									onKeyDown={(e) => {
+										if (e.key !== "Enter" && e.key !== " ") return
+										e.preventDefault()
+										if (!entityStatementId) return
+										navigate("/ownership/graph", {
+											state: {
+												registry,
+												entityStatementId,
+											},
+										})
+									}}
+								>
+									{!loading &&
+										resultKeys.map((key) => (
+											<td
+												key={key}
+												className="border-r border-neutral-700 px-5 py-2 text-center"
+											>
+												{result[key as keyof typeof result] || "N/A"}
+											</td>
+										))}
+								</tr>
+							)
+						})}
 				</tbody>
 			</table>
 		</main>

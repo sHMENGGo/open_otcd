@@ -1,6 +1,7 @@
 import './App.css'
 import Login from './pages/login'
 import Home from './pages/home'
+import OwnershipGraph from './pages/ownershipGraph'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { apiGet } from './utils/api'
 import { useEffect } from 'react'
@@ -10,13 +11,17 @@ function App() {
 
 	useEffect(() => {
 		apiGet('/verifyToken').then(data => {
+			const path = window.location.pathname
 			if (data.user) {
 				console.log("User is logged in:", data.user.username)
-				navigate('/home', {replace: true})
-			}
-			else {
+				if (path === '/login' || path === '/') {
+					navigate('/home', { replace: true })
+				}
+			} else {
 				console.log("No user logged in")
-				navigate('/login', {replace: true})
+				if (path !== '/login') {
+					navigate('/login', { replace: true })
+				}
 			}
 		})
 	}, [])
@@ -28,6 +33,8 @@ function App() {
 				<Route path="/login" element={<Login />} />
 				<Route path="/" element={<Navigate to="/login"/>} />
 				<Route path="/home" element={<Home />} />
+				<Route path="/newscraper" element={<Home />} />
+				<Route path="/ownership/graph" element={<OwnershipGraph />} />
 			</Routes>
 		</main>
 	)

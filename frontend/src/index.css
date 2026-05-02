@@ -59,3 +59,72 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/*
+ * Ownership graph — Obsidian-style local graph look (dark canvas, round nodes,
+ * muted lines, violet “focused” ring). Inspired by Obsidian graph CSS variables
+ * (--graph-node, --graph-line, --graph-text, focused/tag tints).
+ */
+.obs-graph-canvas {
+  --obs-graph-bg: #1e1e1e;
+  --obs-graph-node: #363636;
+  --obs-graph-node-border: #5a5a5a;
+  --obs-graph-node-tag: #4a7d8c;
+  --obs-graph-node-focused: #454545;
+  --obs-graph-focus-ring: #a78bfa;
+  --obs-graph-text: #cccccc;
+  --obs-graph-line: #4a5f6b;
+}
+
+.obs-graph-node {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--obs-graph-node);
+  border: 1px solid var(--obs-graph-node-border);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 2px 8px rgba(0, 0, 0, 0.45);
+  color: var(--obs-graph-text);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.obs-graph-node:hover {
+  border-color: var(--obs-graph-focus-ring);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 0 2px rgba(167, 139, 250, 0.22),
+    0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Tag-style tint (Obsidian graph “tag” / secondary node) — persons */
+.obs-graph-node-person {
+  border-color: #4a6b7a;
+}
+
+/* Other companies (resolved-adjacent) */
+.obs-graph-node-entity {
+  border-color: var(--obs-graph-node-border);
+}
+
+/* “Focused” note — subject company */
+.obs-graph-node-focused {
+  border-radius: 50%;
+  background: var(--obs-graph-node-focused);
+  border: 2px solid var(--obs-graph-focus-ring);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 28px rgba(167, 139, 250, 0.28),
+    0 6px 20px rgba(0, 0, 0, 0.55);
+  color: var(--obs-graph-text);
+}
+
+.obs-graph-node-focused:hover {
+  border-color: #c4b5fd;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 32px rgba(196, 181, 253, 0.35),
+    0 6px 22px rgba(0, 0, 0, 0.55);
+}

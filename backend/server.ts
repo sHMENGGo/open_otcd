@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 import { prisma } from './lib/prisma'
 import {getNews, parseThreatFilter, parseLimit, parsePage} from './services/news-service';
+import { buildOwnershipGraph } from './services/ownership-graph-service';
 import { pool } from './lib/db';
 import verifyToken from './utils/check-token'
 import cookieParser from 'cookie-parser'
@@ -202,6 +203,23 @@ app.post('/api/post/slovakia', verifyToken, async (req, res) => {
 	} catch (err){
 		console.error("Error during search:", err)
 		res.status(500).json({ error: 'Search database failed. Internal Server Error' })
+	}
+})
+
+app.post('/api/post/ownership-graph', verifyToken, async (req, res) => {
+	const { registry, entityStatementId } = req.body as {
+		registry?: string
+		entityStatementId?: string
+	}
+	if (!entityStatementId || typeof entityStatementId !== 'string') {
+		return res.status(400).json({ error: 'entityStatementId is required' })
+	}
+	try {
+		const graph = await buildOwnershipGraph(String(registry ?? 'latvia'), entityStatementId.trim())
+		res.status(200).json(graph)
+	} catch (err) {
+		console.error('ownership-graph:', err)
+		res.status(500).json({ error: 'Failed to build ownership graph' })
 	}
 })
 

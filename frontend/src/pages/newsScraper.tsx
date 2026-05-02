@@ -102,6 +102,7 @@ export default function NewsScraper() {
         });
 
         if (!response.ok) {
+          console.error("Error loading news feed:", response.statusText, response.status, response.body);
           throw new Error('Unable to load news feed.');
         }
 

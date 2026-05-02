@@ -13,20 +13,22 @@ dotenv.config()
 const app = express()
 
 // Middleware
-app.use(cors({origin:"http://localhost:3000", credentials: true})) // Allows React to talk to this API
-app.use(express.json()) // Parses incoming JSON requests
-app.use(cookieParser()) // Parses cookies from incoming requests
+app.use(cors({origin:"http://localhost:3000", credentials: true})) 
+app.use(express.json()) 
+app.use(cookieParser()) 
 app.listen(3001, () => {console.log('Server is running on http://localhost:3001')})
 
-// Test the database connection
+// Test the database connection 
 async function checkConnection() {
 	try {
 		const client = await pool.connect()
 		console.log("✅ Database connection successful")
 		client.release()
-	} catch (err) {console.error("❌ Database connection failed:", err)
-	} finally {await pool.end()}
-} checkConnection()
+	} catch (err) {
+		console.error("❌ Database connection failed:", err)
+	}
+}
+checkConnection()
 
 // ==========================================================================================
 
@@ -209,7 +211,7 @@ const searchInput = 'jin';
 // =============================== NEWS SCRAPER ==================================
 
 
-app.get('/api/get/news', async (req: Request, res: Response) => {
+app.get('/api/news', async (req: Request, res: Response) => {
   const search = typeof req.query.search === 'string' ? req.query.search.trim() : '';
   const threatFilter = parseThreatFilter(req.query.threat);
   const pageSize = parseLimit(req.query.pageSize ?? req.query.limit);

@@ -10,143 +10,154 @@ datasource db {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model gleif_version_0_4_entity_annotations {
-  link                   String?   @map("_link")
-  link_entity_statement  String?   @map("_link_entity_statement")
+  link                   String                              @id @map("_link")
+  link_entity_statement  String?                             @map("_link_entity_statement")
   motivation             String?
   description            String?
   statementpointertarget Boolean?
-  creationdate           DateTime? @db.Timestamp(6)
+  creationdate           DateTime?                           @db.Timestamp(6)
   url                    String?
   createdby_name         String?
   createdby_uri          String?
+  entity_statement       gleif_version_0_4_entity_statement? @relation(fields: [link_entity_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_entity_statement_annotations")
 
+  @@index([link_entity_statement], map: "idx_annotations_link_entity")
   @@map("entity_annotations")
-  @@ignore
   @@schema("gleif_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model gleif_version_0_4_entity_recorddetails_addresses {
-  link                  String? @map("_link")
-  link_entity_statement String? @map("_link_entity_statement")
+  link                  String                              @id @map("_link")
+  link_entity_statement String?                             @map("_link_entity_statement")
   type                  String?
   address               String?
   postcode              String?
   country_name          String?
   country_code          String?
+  entity_statement      gleif_version_0_4_entity_statement? @relation(fields: [link_entity_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_entity_statement_recorddetails_addresses")
 
+  @@index([link_entity_statement], map: "idx_addresses_link_entity")
   @@map("entity_recorddetails_addresses")
-  @@ignore
   @@schema("gleif_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model gleif_version_0_4_entity_recorddetails_identifiers {
-  link                  String? @map("_link")
-  link_entity_statement String? @map("_link_entity_statement")
+  link                  String                              @id @map("_link")
+  link_entity_statement String?                             @map("_link_entity_statement")
   id                    String?
   scheme                String?
   schemename            String?
   uri                   String?
+  entity_statement      gleif_version_0_4_entity_statement? @relation(fields: [link_entity_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_entity_statement_recorddetails_identifiers")
 
+  @@index([link_entity_statement], map: "idx_identifiers_link_entity")
   @@map("entity_recorddetails_identifiers")
-  @@ignore
   @@schema("gleif_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model gleif_version_0_4_entity_source_assertedby {
-  link                  String? @map("_link")
-  link_entity_statement String? @map("_link_entity_statement")
+  link                  String                              @id @map("_link")
+  link_entity_statement String?                             @map("_link_entity_statement")
   name                  String?
   uri                   String?
+  entity_statement      gleif_version_0_4_entity_statement? @relation(fields: [link_entity_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_entity_statement_source_assertedby")
 
+  @@index([link_entity_statement], map: "idx_source_link_entity")
   @@map("entity_source_assertedby")
-  @@ignore
   @@schema("gleif_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model gleif_version_0_4_entity_statement {
-  link                               String?   @map("_link")
+  link                               String                                               @id @map("_link")
   statementid                        String?
   declarationsubject                 String?
-  statementdate                      DateTime? @db.Timestamp(6)
+  statementdate                      DateTime?                                            @db.Timestamp(6)
   recordid                           String?
   recordstatus                       String?
   recordtype                         String?
   recorddetails_iscomponent          Boolean?
-  recorddetails_foundingdate         DateTime? @db.Timestamp(6)
+  recorddetails_foundingdate         DateTime?                                            @db.Timestamp(6)
   recorddetails_name                 String?
   recorddetails_uri                  String?
   recorddetails_entitytype_type      String?
   recorddetails_entitytype_details   String?
   recorddetails_jurisdiction_name    String?
   recorddetails_jurisdiction_code    String?
-  publicationdetails_publicationdate DateTime? @db.Timestamp(6)
-  publicationdetails_bodsversion     Decimal?  @db.Decimal
+  publicationdetails_publicationdate DateTime?                                            @db.Timestamp(6)
+  publicationdetails_bodsversion     Decimal?                                             @db.Decimal
   publicationdetails_license         String?
   publicationdetails_publisher_name  String?
   publicationdetails_publisher_url   String?
   source_type                        String?
   source_url                         String?
   recorddetails_alternatenames       String?
-  recorddetails_dissolutiondate      DateTime? @db.Timestamp(6)
+  recorddetails_dissolutiondate      DateTime?                                            @db.Timestamp(6)
+  entity_annotations                 gleif_version_0_4_entity_annotations[]
+  entity_recorddetails_addresses     gleif_version_0_4_entity_recorddetails_addresses[]
+  entity_recorddetails_identifiers   gleif_version_0_4_entity_recorddetails_identifiers[]
+  entity_source_assertedby           gleif_version_0_4_entity_source_assertedby[]
 
+  @@index([recorddetails_name(ops: raw("gin_trgm_ops"))], map: "idx_entity_recorddetails_name_gin", type: Gin)
   @@map("entity_statement")
-  @@ignore
   @@schema("gleif_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model gleif_version_0_4_relationship_annotations {
-  link                        String?   @map("_link")
-  link_relationship_statement String?   @map("_link_relationship_statement")
+  link                        String                                    @id @map("_link")
+  link_relationship_statement String?                                   @map("_link_relationship_statement")
   motivation                  String?
   description                 String?
   statementpointertarget      Boolean?
-  creationdate                DateTime? @db.Timestamp(6)
+  creationdate                DateTime?                                 @db.Timestamp(6)
   createdby_name              String?
   createdby_uri               String?
+  relationship_statement      gleif_version_0_4_relationship_statement? @relation(fields: [link_relationship_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_relationship_statement_annotations")
 
+  @@index([link_relationship_statement], map: "idx_annotations_link_relationship")
   @@map("relationship_annotations")
-  @@ignore
   @@schema("gleif_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model gleif_version_0_4_relationship_recorddetails_interests {
-  link                         String?   @map("_link")
-  link_relationship_statement  String?   @map("_link_relationship_statement")
+  link                         String                                    @id @map("_link")
+  link_relationship_statement  String?                                   @map("_link_relationship_statement")
   directorindirect             String?
   type                         String?
   beneficialownershiporcontrol Boolean?
   details                      String?
-  startdate                    DateTime? @db.Timestamp(6)
+  startdate                    DateTime?                                 @db.Timestamp(6)
+  relationship_statement       gleif_version_0_4_relationship_statement? @relation(fields: [link_relationship_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_relationship_statement_recorddetails_interests")
 
+  @@index([link_relationship_statement], map: "idx_interests_link_relationship")
   @@map("relationship_recorddetails_interests")
-  @@ignore
   @@schema("gleif_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model gleif_version_0_4_relationship_source_assertedby {
-  link                        String? @map("_link")
-  link_relationship_statement String? @map("_link_relationship_statement")
+  link                        String                                    @id @map("_link")
+  link_relationship_statement String?                                   @map("_link_relationship_statement")
   name                        String?
   uri                         String?
+  relationship_statement      gleif_version_0_4_relationship_statement? @relation(fields: [link_relationship_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_relationship_statement_source_assertedby")
 
+  @@index([link_relationship_statement], map: "idx_source_link_relationship")
   @@map("relationship_source_assertedby")
-  @@ignore
   @@schema("gleif_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model gleif_version_0_4_relationship_statement {
-  link                                      String?   @map("_link")
+  link                                      String                                                   @id @map("_link")
   statementid                               String?
   declarationsubject                        String?
-  statementdate                             DateTime? @db.Timestamp(6)
+  statementdate                             DateTime?                                                @db.Timestamp(6)
   recordid                                  String?
   recordstatus                              String?
   recordtype                                String?
@@ -154,65 +165,65 @@ model gleif_version_0_4_relationship_statement {
   recorddetails_iscomponent                 Boolean?
   recorddetails_interestedparty_reason      String?
   recorddetails_interestedparty_description String?
-  publicationdetails_publicationdate        DateTime? @db.Timestamp(6)
-  publicationdetails_bodsversion            Decimal?  @db.Decimal
+  publicationdetails_publicationdate        DateTime?                                                @db.Timestamp(6)
+  publicationdetails_bodsversion            Decimal?                                                 @db.Decimal
   publicationdetails_license                String?
   publicationdetails_publisher_name         String?
   publicationdetails_publisher_url          String?
   source_type                               String?
   source_url                                String?
   recorddetails_interestedparty             String?
+  relationship_annotations                  gleif_version_0_4_relationship_annotations[]
+  relationship_recorddetails_interests      gleif_version_0_4_relationship_recorddetails_interests[]
+  relationship_source_assertedby            gleif_version_0_4_relationship_source_assertedby[]
 
+  @@index([recorddetails_subject], map: "idx_relationship_statement_recorddetails_subject")
   @@map("relationship_statement")
-  @@ignore
   @@schema("gleif_version_0_4")
 }
 
 model latvia_entity_addresses {
-  link                  String?                  @map("_link")
+  link                  String                   @id @map("_link")
   link_entity_statement String?                  @map("_link_entity_statement")
   type                  String?
   address               String?
   country               String?
   statementid           String?
-  id                    Int                      @id @default(autoincrement())
-  entity_statement      latvia_entity_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+  entity_statement      latvia_entity_statement? @relation(fields: [link_entity_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_entity_statement_addresses")
 
-  @@index([statementid], map: "idx_entity_addresses_statementid")
+  @@index([link_entity_statement], map: "idx_addresses_link_entity")
   @@map("entity_addresses")
   @@schema("latvia")
 }
 
 model latvia_entity_identifiers {
-  link                  String?                  @map("_link")
+  link                  String                   @id @map("_link")
   link_entity_statement String?                  @map("_link_entity_statement")
   identifier_number     String?
   scheme                String?
   statementid           String?
-  id                    Int                      @id @default(autoincrement())
-  entity_statement      latvia_entity_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+  entity_statement      latvia_entity_statement? @relation(fields: [link_entity_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_entity_statement_identifiers")
 
-  @@index([statementid], map: "idx_entity_identifiers_statementid")
+  @@index([link_entity_statement], map: "idx_identifiers_link_entity")
   @@map("entity_identifiers")
   @@schema("latvia")
 }
 
 model latvia_entity_source_assertedby {
-  link                  String?                  @map("_link")
+  link                  String                   @id @map("_link")
   link_entity_statement String?                  @map("_link_entity_statement")
   name                  String?
   statementid           String?
-  id                    Int                      @id @default(autoincrement())
-  entity_statement      latvia_entity_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+  entity_statement      latvia_entity_statement? @relation(fields: [link_entity_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_entity_statement_source_assertedby")
 
-  @@index([statementid], map: "idx_entity_source_assertedby_statementid")
+  @@index([link_entity_statement], map: "idx_source_link_entity")
   @@map("entity_source_assertedby")
   @@schema("latvia")
 }
 
 model latvia_entity_statement {
-  link                                 String?                           @map("_link")
-  statementid                          String                            @id
+  link                                 String                            @id @map("_link")
+  statementid                          String?
   statementtype                        String?
   statementdate                        DateTime?                         @db.Timestamp(6)
   iscomponent                          Boolean?
@@ -232,14 +243,14 @@ model latvia_entity_statement {
   entity_addresses                     latvia_entity_addresses[]
   entity_identifiers                   latvia_entity_identifiers[]
   entity_source_assertedby             latvia_entity_source_assertedby[]
-  ooc_statement                        latvia_ooc_statement[]
 
+  @@index([statementid], map: "idx_entity_statementid")
   @@map("entity_statement")
   @@schema("latvia")
 }
 
 model latvia_ooc_interests {
-  link                         String?               @map("_link")
+  link                         String                @id @map("_link")
   link_ooc_statement           String?               @map("_link_ooc_statement")
   type                         String?
   interestlevel                String?
@@ -247,35 +258,33 @@ model latvia_ooc_interests {
   details                      String?
   share_exact                  Decimal?              @db.Decimal
   statementid                  String?
-  id                           Int                   @id @default(autoincrement())
-  ooc_statement                latvia_ooc_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+  ooc_statement                latvia_ooc_statement? @relation(fields: [link_ooc_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_ooc_statement_interests")
 
-  @@index([statementid], map: "idx_ooc_interests_statementid")
+  @@index([link_ooc_statement], map: "idx_interests_link_ooc")
   @@map("ooc_interests")
   @@schema("latvia")
 }
 
 model ooc_source_assertedby {
-  link               String?               @map("_link")
+  link               String                @id @map("_link")
   link_ooc_statement String?               @map("_link_ooc_statement")
   name               String?
   statementid        String?
-  id                 Int                   @id @default(autoincrement())
-  ooc_statement      latvia_ooc_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+  ooc_statement      latvia_ooc_statement? @relation(fields: [link_ooc_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_ooc_statement_source_assertedby")
 
-  @@index([statementid], map: "idx_ooc_source_assertedby_statementid")
+  @@index([link_ooc_statement], map: "idx_source_link_ooc")
   @@schema("latvia")
 }
 
 model latvia_ooc_statement {
-  link                                       String?                  @map("_link")
-  statementid                                String                   @id
+  link                                       String                  @id @map("_link")
+  statementid                                String?
   statementtype                              String?
-  statementdate                              DateTime?                @db.Timestamp(6)
+  statementdate                              DateTime?               @db.Timestamp(6)
   iscomponent                                Boolean?
   subject_describedbyentitystatement         String?
   interestedparty_describedbypersonstatement String?
-  publicationdetails_publicationdate         DateTime?                @db.Timestamp(6)
+  publicationdetails_publicationdate         DateTime?               @db.Timestamp(6)
   publicationdetails_bodsversion             String?
   publicationdetails_license                 String?
   publicationdetails_publisher_name          String?
@@ -287,90 +296,83 @@ model latvia_ooc_statement {
   interestedparty_unspecified_description    String?
   ooc_interests                              latvia_ooc_interests[]
   ooc_source_assertedby                      ooc_source_assertedby[]
-  entity_statement                           latvia_entity_statement? @relation(fields: [subject_describedbyentitystatement], references: [statementid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ooc_entity_statement")
-  person_statement                           latvia_person_statement? @relation(fields: [interestedparty_describedbypersonstatement], references: [statementid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ooc_person_statement")
 
+  @@index([interestedparty_describedbypersonstatement], map: "idx_ooc_interested_person")
+  @@index([subject_describedbyentitystatement], map: "idx_ooc_subject_entity")
   @@map("ooc_statement")
   @@schema("latvia")
 }
 
 model latvia_person_addresses {
-  link                  String?                  @map("_link")
+  link                  String                   @id @map("_link")
   link_person_statement String?                  @map("_link_person_statement")
   type                  String?
   country               String?
   statementid           String?
-  id                    Int                      @id @default(autoincrement())
-  person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+  person_statement      latvia_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_addresses")
 
-  @@index([statementid], map: "idx_person_addresses_statementid")
+  @@index([link_person_statement], map: "idx_addresses_link_person")
   @@map("person_addresses")
   @@schema("latvia")
 }
 
 model latvia_person_identifiers {
-  link                  String?                  @map("_link")
+  link                  String                   @id @map("_link")
   link_person_statement String?                  @map("_link_person_statement")
   identifier_number     String?
   scheme                String?
   statementid           String?
-  id                    Int                      @id @default(autoincrement())
-  person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+  person_statement      latvia_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_identifiers")
 
-  @@index([statementid], map: "idx_person_identifiers_statementid")
+  @@index([link_person_statement], map: "idx_identifiers_link_person")
   @@map("person_identifiers")
   @@schema("latvia")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model latvia_person_names {
-  link                  String?                  @map("_link")
+  link                  String                   @id @map("_link")
   link_person_statement String?                  @map("_link_person_statement")
   type                  String?
   fullname              String?
   familyname            String?
   givenname             String?
   statementid           String?
-  id                    Int                      @id @default(autoincrement())
-  person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+  person_statement      latvia_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_names")
 
-  @@index([fullname], map: "idx_person_names_fullname")
-  @@index([fullname(ops: raw("gin_trgm_ops"))], map: "idx_person_names_fullname_gin", type: Gin)
-  @@index([statementid], map: "idx_person_names_statementid")
+  @@index([fullname(ops: raw("gin_trgm_ops"))], map: "idx_names_fullname_gin", type: Gin)
   @@map("person_names")
   @@schema("latvia")
 }
 
 model latvia_person_nationalities {
-  link                  String?                  @map("_link")
+  link                  String                   @id @map("_link")
   link_person_statement String?                  @map("_link_person_statement")
   name                  String?
   code                  String?
   statementid           String?
-  id                    Int                      @id @default(autoincrement())
-  person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+  person_statement      latvia_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_nationalities")
 
-  @@index([statementid], map: "idx_person_nationalities_statementid")
+  @@index([link_person_statement], map: "idx_nationalities_link_person")
   @@map("person_nationalities")
   @@schema("latvia")
 }
 
 model latvia_person_source_assertedby {
-  link                  String?                  @map("_link")
+  link                  String                   @id @map("_link")
   link_person_statement String?                  @map("_link_person_statement")
   name                  String?
   statementid           String?
-  id                    Int                      @id @default(autoincrement())
-  person_statement      latvia_person_statement? @relation(fields: [statementid], references: [statementid], onDelete: NoAction, onUpdate: NoAction)
+  person_statement      latvia_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_source_assertedby")
 
-  @@index([statementid], map: "idx_person_source_assertedby_statementid")
+  @@index([link_person_statement], map: "idx_source_link_person")
   @@map("person_source_assertedby")
   @@schema("latvia")
 }
 
 model latvia_person_statement {
-  link                               String?                           @map("_link")
-  statementid                        String                            @id
+  link                               String                            @id @map("_link")
+  statementid                        String?
   statementtype                      String?
   statementdate                      DateTime?                         @db.Timestamp(6)
   iscomponent                        Boolean?
@@ -383,13 +385,13 @@ model latvia_person_statement {
   publicationdetails_publisher_url   String?
   source_type                        String?
   unspecifiedpersondetails_reason    String?
-  ooc_statement                      latvia_ooc_statement[]
   person_addresses                   latvia_person_addresses[]
   person_identifiers                 latvia_person_identifiers[]
   person_names                       latvia_person_names[]
   person_nationalities               latvia_person_nationalities[]
   person_source_assertedby           latvia_person_source_assertedby[]
 
+  @@index([link], map: "idx_person_statement_link")
   @@map("person_statement")
   @@schema("latvia")
 }
@@ -413,182 +415,197 @@ model user {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model register_entity_addresses {
-  link                  String? @map("_link")
-  link_entity_statement String? @map("_link_entity_statement")
+  link                  String                     @id @map("_link")
+  link_entity_statement String?                    @map("_link_entity_statement")
   address               String?
   country               String?
   type                  String?
+  entity_statement      register_entity_statement? @relation(fields: [link_entity_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_entity_statement_addresses")
 
+  @@index([link_entity_statement], map: "idx_addresses_link_entity")
   @@map("entity_addresses")
-  @@ignore
   @@schema("register")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model register_entity_identifiers {
-  link                  String? @map("_link")
-  link_entity_statement String? @map("_link_entity_statement")
+  link                  String                     @id @map("_link")
+  link_entity_statement String?                    @map("_link_entity_statement")
   id                    String?
   scheme                String?
   schemename            String?
   uri                   String?
+  entity_statement      register_entity_statement? @relation(fields: [link_entity_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_entity_statement_identifiers")
 
+  @@index([link_entity_statement], map: "idx_identifiers_link_entity")
   @@map("entity_identifiers")
-  @@ignore
   @@schema("register")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model register_entity_statement {
-  link                               String?   @map("_link")
+  link                               String                        @id @map("_link")
   statementtype                      String?
   entitytype                         String?
-  foundingdate                       DateTime? @db.Timestamp(6)
+  foundingdate                       DateTime?                     @db.Timestamp(6)
   statementid                        String?
-  statementdate                      DateTime? @db.Timestamp(6)
+  statementdate                      DateTime?                     @db.Timestamp(6)
   iscomponent                        Boolean?
   name                               String?
   incorporatedinjurisdiction_code    String?
   incorporatedinjurisdiction_name    String?
-  publicationdetails_bodsversion     Decimal?  @db.Decimal
+  publicationdetails_bodsversion     Decimal?                      @db.Decimal
   publicationdetails_license         String?
-  publicationdetails_publicationdate DateTime? @db.Timestamp(6)
+  publicationdetails_publicationdate DateTime?                     @db.Timestamp(6)
   publicationdetails_publisher_name  String?
   publicationdetails_publisher_url   String?
-  dissolutiondate                    DateTime? @db.Timestamp(6)
+  dissolutiondate                    DateTime?                     @db.Timestamp(6)
   replacesstatements                 String?
   alternatenames                     String?
   source_assertedby                  Boolean?
   source_description                 String?
-  source_retrievedat                 DateTime? @db.Timestamp(6)
+  source_retrievedat                 DateTime?                     @db.Timestamp(6)
   source_type                        String?
   source_url                         String?
+  entity_addresses                   register_entity_addresses[]
+  entity_identifiers                 register_entity_identifiers[]
 
+  @@index([statementid], map: "idx_entity_statementid")
   @@map("entity_statement")
-  @@ignore
   @@schema("register")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model register_ooc_interests {
-  link                   String?   @map("_link")
-  link_ooc_statement     String?   @map("_link_ooc_statement")
+  link                   String                  @id @map("_link")
+  link_ooc_statement     String?                 @map("_link_ooc_statement")
   type                   String?
-  startdate              DateTime? @db.Timestamp(6)
+  startdate              DateTime?               @db.Timestamp(6)
   share_exact            String?
   share_maximum          String?
   share_minimum          String?
-  enddate                DateTime? @db.Timestamp(6)
+  enddate                DateTime?               @db.Timestamp(6)
   details                String?
   share_exclusivemaximum Boolean?
   share_exclusiveminimum Boolean?
+  ooc_statement          register_ooc_statement? @relation(fields: [link_ooc_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_ooc_statement_interests")
 
+  @@index([link_ooc_statement], map: "idx_interests_link_ooc")
   @@map("ooc_interests")
-  @@ignore
   @@schema("register")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model register_ooc_statement {
-  link                                       String?   @map("_link")
+  link                                       String                   @id @map("_link")
   statementtype                              String?
-  statementdate                              DateTime? @db.Timestamp(6)
+  statementdate                              DateTime?                @db.Timestamp(6)
   iscomponent                                Boolean?
   statementid                                String?
   interestedparty_describedbypersonstatement String?
-  publicationdetails_bodsversion             Decimal?  @db.Decimal
+  publicationdetails_bodsversion             Decimal?                 @db.Decimal
   publicationdetails_license                 String?
-  publicationdetails_publicationdate         DateTime? @db.Timestamp(6)
+  publicationdetails_publicationdate         DateTime?                @db.Timestamp(6)
   publicationdetails_publisher_name          String?
   publicationdetails_publisher_url           String?
   source_assertedby                          Boolean?
   source_description                         String?
-  source_retrievedat                         DateTime? @db.Timestamp(6)
+  source_retrievedat                         DateTime?                @db.Timestamp(6)
   source_type                                String?
   source_url                                 String?
   subject_describedbyentitystatement         String?
   interestedparty_describedbyentitystatement String?
+  ooc_interests                              register_ooc_interests[]
 
+  @@index([interestedparty_describedbypersonstatement], map: "idx_ooc_interested_person")
+  @@index([subject_describedbyentitystatement], map: "idx_ooc_subject_entity")
   @@map("ooc_statement")
-  @@ignore
   @@schema("register")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model register_person_addresses {
-  link                  String? @map("_link")
-  link_person_statement String? @map("_link_person_statement")
+  link                  String                     @id @map("_link")
+  link_person_statement String?                    @map("_link_person_statement")
   address               String?
   country               String?
   type                  String?
+  person_statement      register_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_addresses")
 
+  @@index([link_person_statement], map: "idx_addresses_link_person")
   @@map("person_addresses")
-  @@ignore
   @@schema("register")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model register_person_identifiers {
-  link                  String? @map("_link")
-  link_person_statement String? @map("_link_person_statement")
+  link                  String                     @id @map("_link")
+  link_person_statement String?                    @map("_link_person_statement")
   id                    String?
   schemename            String?
   uri                   String?
+  person_statement      register_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_identifiers")
 
+  @@index([link_person_statement], map: "idx_identifiers_link_person")
   @@map("person_identifiers")
-  @@ignore
   @@schema("register")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model register_person_names {
-  link                  String? @map("_link")
-  link_person_statement String? @map("_link_person_statement")
+  link                  String                     @id @map("_link")
+  link_person_statement String?                    @map("_link_person_statement")
   fullname              String?
   type                  String?
   familyname            String?
   givenname             String?
+  person_statement      register_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_names")
 
+  @@index([fullname(ops: raw("gin_trgm_ops"))], map: "idx_names_fullname_gin", type: Gin)
   @@map("person_names")
-  @@ignore
   @@schema("register")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model register_person_nationalities {
-  link                  String? @map("_link")
-  link_person_statement String? @map("_link_person_statement")
+  link                  String                     @id @map("_link")
+  link_person_statement String?                    @map("_link_person_statement")
   code                  String?
   name                  String?
+  person_statement      register_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_nationalities")
 
+  @@index([link_person_statement], map: "idx_nationalities_link_person")
   @@map("person_nationalities")
-  @@ignore
   @@schema("register")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model register_person_statement {
-  link                               String?   @map("_link")
+  link                               String                          @id @map("_link")
   statementtype                      String?
   iscomponent                        Boolean?
   statementid                        String?
   persontype                         String?
-  statementdate                      DateTime? @db.Timestamp(6)
-  publicationdetails_bodsversion     Decimal?  @db.Decimal
+  statementdate                      DateTime?                       @db.Timestamp(6)
+  publicationdetails_bodsversion     Decimal?                        @db.Decimal
   publicationdetails_license         String?
-  publicationdetails_publicationdate DateTime? @db.Timestamp(6)
+  publicationdetails_publicationdate DateTime?                       @db.Timestamp(6)
   publicationdetails_publisher_name  String?
   publicationdetails_publisher_url   String?
   source_assertedby                  Boolean?
   source_description                 String?
-  source_retrievedat                 DateTime? @db.Timestamp(6)
+  source_retrievedat                 DateTime?                       @db.Timestamp(6)
   source_type                        String?
   source_url                         String?
   replacesstatements                 String?
-  birthdate                          DateTime? @db.Timestamp(6)
+  birthdate                          DateTime?                       @db.Timestamp(6)
+  person_addresses                   register_person_addresses[]
+  person_identifiers                 register_person_identifiers[]
+  person_names                       register_person_names[]
+  person_nationalities               register_person_nationalities[]
 
+  @@index([statementid], map: "idx_person_statementid")
   @@map("person_statement")
-  @@ignore
   @@schema("register")
 }
 
@@ -614,6 +631,7 @@ model slovakia_entity_addresses {
   type                  String?
   entity_statement      slovakia_entity_statement? @relation(fields: [link_entity_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_entity_statement_addresses")
 
+  @@index([link_entity_statement], map: "idx_addresses_link_entity")
   @@map("entity_addresses")
   @@schema("slovakia")
 }
@@ -627,16 +645,17 @@ model slovakia_entity_identifiers {
   uri                   String?
   entity_statement      slovakia_entity_statement? @relation(fields: [link_entity_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_entity_statement_identifiers")
 
+  @@index([link_entity_statement], map: "idx_identifiers_link_entity")
   @@map("entity_identifiers")
   @@schema("slovakia")
 }
 
 model slovakia_entity_statement {
-  link                               String?                       @unique(map: "entity_statement_link") @map("_link")
+  link                               String                        @id @map("_link")
   statementtype                      String?
   entitytype                         String?
   foundingdate                       DateTime?                     @db.Timestamp(6)
-  statementid                        String                        @id
+  statementid                        String?
   statementdate                      DateTime?                     @db.Timestamp(6)
   iscomponent                        Boolean?
   name                               String?
@@ -652,73 +671,71 @@ model slovakia_entity_statement {
   alternatenames                     String?
   entity_addresses                   slovakia_entity_addresses[]
   entity_identifiers                 slovakia_entity_identifiers[]
-  ooc_statement                      slovakia_ooc_statement[]
 
+  @@index([statementid], map: "idx_entity_statementid")
   @@map("entity_statement")
   @@schema("slovakia")
 }
 
 model slovakia_ooc_statement {
-  link                                       String                     @map("_link")
+  link                                       String    @id @map("_link")
   statementtype                              String?
-  statementdate                              DateTime?                  @db.Timestamp(6)
+  statementdate                              DateTime? @db.Timestamp(6)
   iscomponent                                Boolean?
-  statementid                                String                     @id
+  statementid                                String?
   interestedparty_describedbypersonstatement String?
-  publicationdetails_bodsversion             Decimal?                   @db.Decimal
+  publicationdetails_bodsversion             Decimal?  @db.Decimal
   publicationdetails_license                 String?
-  publicationdetails_publicationdate         DateTime?                  @db.Timestamp(6)
+  publicationdetails_publicationdate         DateTime? @db.Timestamp(6)
   publicationdetails_publisher_name          String?
   publicationdetails_publisher_url           String?
   source_assertedby                          Boolean?
   source_description                         String?
-  source_retrievedat                         DateTime?                  @db.Timestamp(6)
+  source_retrievedat                         DateTime? @db.Timestamp(6)
   source_type                                String?
   source_url                                 String?
   subject_describedbyentitystatement         String?
-  person_statement                           slovakia_person_statement? @relation(fields: [interestedparty_describedbypersonstatement], references: [statementid], onDelete: NoAction, onUpdate: NoAction, map: "FK_ooc_person_statement")
-  entity_statement                           slovakia_entity_statement? @relation(fields: [subject_describedbyentitystatement], references: [statementid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ooc_entity_statement")
 
+  @@index([interestedparty_describedbypersonstatement], map: "idx_interested_person")
+  @@index([subject_describedbyentitystatement], map: "idx_subject_entity")
   @@map("ooc_statement")
   @@schema("slovakia")
 }
 
 model slovakia_person_addresses {
-  link                  String?                    @map("_link")
+  link                  String                     @id @map("_link")
   link_person_statement String?                    @map("_link_person_statement")
   address               String?
   country               String?
   type                  String?
-  id                    Int                        @id @default(autoincrement())
   person_statement      slovakia_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_addresses")
 
+  @@index([link_person_statement], map: "idx_addresses_link_person")
   @@map("person_addresses")
   @@schema("slovakia")
 }
 
 model slovakia_person_identifiers {
-  link                  String?                    @map("_link")
+  link                  String                     @id @map("_link")
   link_person_statement String?                    @map("_link_person_statement")
   identifier_number     String?
   schemename            String?
   uri                   String?
-  id                    Int                        @id @default(autoincrement())
   person_statement      slovakia_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_identifiers")
 
+  @@index([link_person_statement], map: "idx_identifiers_link_person")
   @@map("person_identifiers")
   @@schema("slovakia")
 }
 
 model slovakia_person_names {
-  link                  String                     @map("_link")
+  link                  String                     @id @map("_link")
   link_person_statement String?                    @map("_link_person_statement")
   fullname              String?
   type                  String?
-  id                    Int                        @id @default(autoincrement())
   person_statement      slovakia_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_names")
 
-  @@index([fullname], map: "idx_person_names_fullname")
-  @@index([fullname(ops: raw("gin_trgm_ops"))], map: "idx_person_names_fullname_gin", type: Gin)
+  @@index([fullname(ops: raw("gin_trgm_ops"))], map: "idx_names_fullname_gin", type: Gin)
   @@map("person_names")
   @@schema("slovakia")
 }
@@ -730,15 +747,16 @@ model slovakia_person_nationalities {
   name                  String?
   person_statement      slovakia_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "FK_person_statement_naationalities")
 
+  @@index([link_person_statement], map: "idx_nationalities_link_person")
   @@map("person_nationalities")
   @@schema("slovakia")
 }
 
 model slovakia_person_statement {
-  link                               String                          @unique(map: "person_statement_link_unique") @map("_link")
+  link                               String                          @id @map("_link")
   statementtype                      String?
   birthdate                          DateTime?                       @db.Timestamp(6)
-  statementid                        String                          @id
+  statementid                        String?
   iscomponent                        Boolean?
   statementdate                      DateTime?                       @db.Timestamp(6)
   persontype                         String?
@@ -752,92 +770,96 @@ model slovakia_person_statement {
   source_retrievedat                 DateTime?                       @db.Timestamp(6)
   source_type                        String?
   source_url                         String?
-  ooc_statement                      slovakia_ooc_statement[]
   person_addresses                   slovakia_person_addresses[]
   person_identifiers                 slovakia_person_identifiers[]
   person_names                       slovakia_person_names[]
   person_nationalities               slovakia_person_nationalities[]
 
+  @@index([link], map: "idx_person_link")
   @@map("person_statement")
   @@schema("slovakia")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model uk_version_0_4_entity_annotations {
-  link                   String?   @map("_link")
-  link_entity_statement  String?   @map("_link_entity_statement")
+  link                   String                           @id @map("_link")
+  link_entity_statement  String?                          @map("_link_entity_statement")
   motivation             String?
   description            String?
   statementpointertarget Boolean?
-  creationdate           DateTime? @db.Timestamp(6)
+  creationdate           DateTime?                        @db.Timestamp(6)
   url                    String?
   createdby_name         String?
   createdby_uri          String?
+  entity_statement       uk_version_0_4_entity_statement? @relation(fields: [link_entity_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_entity_statement_annotations")
 
+  @@index([link_entity_statement], map: "idx_annotations_link_entity")
   @@map("entity_annotations")
-  @@ignore
   @@schema("uk_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model uk_version_0_4_entity_recorddetails_addresses {
-  link                  String? @map("_link")
-  link_entity_statement String? @map("_link_entity_statement")
+  link                  String                           @id @map("_link")
+  link_entity_statement String?                          @map("_link_entity_statement")
   type                  String?
   address               String?
   postcode              String?
   country_name          String?
   country_code          String?
+  entity_statement      uk_version_0_4_entity_statement? @relation(fields: [link_entity_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_entity_statement_recorddetails_addresses")
 
+  @@index([link_entity_statement], map: "idx_addresses_link_entity")
   @@map("entity_recorddetails_addresses")
-  @@ignore
   @@schema("uk_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model uk_version_0_4_entity_recorddetails_identifiers {
-  link                  String? @map("_link")
-  link_entity_statement String? @map("_link_entity_statement")
+  link                  String                           @id @map("_link")
+  link_entity_statement String?                          @map("_link_entity_statement")
   id                    String?
   scheme                String?
   schemename            String?
   uri                   String?
+  entity_statement      uk_version_0_4_entity_statement? @relation(fields: [link_entity_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_entity_statement_recorddetails_identifiers")
 
+  @@index([link_entity_statement], map: "idx_identifiers_link_entity")
   @@map("entity_recorddetails_identifiers")
-  @@ignore
   @@schema("uk_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model uk_version_0_4_entity_source_assertedby {
-  link                  String? @map("_link")
-  link_entity_statement String? @map("_link_entity_statement")
+  link                  String                           @id @map("_link")
+  link_entity_statement String?                          @map("_link_entity_statement")
   name                  String?
   uri                   String?
+  entity_statement      uk_version_0_4_entity_statement? @relation(fields: [link_entity_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_entity_statement_source_assertedby")
 
+  @@index([link_entity_statement], map: "idx_source_link_entity")
   @@map("entity_source_assertedby")
-  @@ignore
   @@schema("uk_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model uk_version_0_4_entity_statement {
-  link                                         String?   @map("_link")
+  link                                         String                                            @id @map("_link")
   statementid                                  String?
   declarationsubject                           String?
-  statementdate                                DateTime? @db.Timestamp(6)
+  statementdate                                DateTime?                                         @db.Timestamp(6)
   recordid                                     String?
   recordstatus                                 String?
   recordtype                                   String?
   recorddetails_iscomponent                    Boolean?
-  recorddetails_foundingdate                   DateTime? @db.Timestamp(6)
+  recorddetails_foundingdate                   DateTime?                                         @db.Timestamp(6)
   recorddetails_name                           String?
   recorddetails_entitytype_type                String?
   recorddetails_jurisdiction_name              String?
   recorddetails_jurisdiction_code              String?
   recorddetails_publiclisting_haspubliclisting Boolean?
-  publicationdetails_publicationdate           DateTime? @db.Timestamp(6)
-  publicationdetails_bodsversion               Decimal?  @db.Decimal
+  publicationdetails_publicationdate           DateTime?                                         @db.Timestamp(6)
+  publicationdetails_bodsversion               Decimal?                                          @db.Decimal
   publicationdetails_license                   String?
   publicationdetails_publisher_name            String?
   publicationdetails_publisher_url             String?
@@ -846,173 +868,123 @@ model uk_version_0_4_entity_statement {
   recorddetails_uri                            String?
   recorddetails_entitytype_details             String?
   recorddetails_alternatenames                 String?
+  entity_annotations                           uk_version_0_4_entity_annotations[]
+  entity_recorddetails_addresses               uk_version_0_4_entity_recorddetails_addresses[]
+  entity_recorddetails_identifiers             uk_version_0_4_entity_recorddetails_identifiers[]
+  entity_source_assertedby                     uk_version_0_4_entity_source_assertedby[]
 
+  @@index([declarationsubject], map: "idx_entity_declarationsubject")
   @@map("entity_statement")
-  @@ignore
-  @@schema("uk_version_0_4")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model person_annotations {
-  link                   String?   @map("_link")
-  link_person_statement  String?   @map("_link_person_statement")
-  motivation             String?
-  description            String?
-  statementpointertarget Boolean?
-  creationdate           DateTime? @db.Timestamp(6)
-  createdby_name         String?
-  createdby_uri          String?
-
-  @@ignore
-  @@schema("uk_version_0_4")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model person_recorddetails_addresses {
-  link                  String? @map("_link")
-  link_person_statement String? @map("_link_person_statement")
-  type                  String?
-  address               String?
-  postcode              String?
-  country_name          String?
-  country_code          String?
-
-  @@ignore
-  @@schema("uk_version_0_4")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model person_recorddetails_names {
-  link                  String? @map("_link")
-  link_person_statement String? @map("_link_person_statement")
-  type                  String?
-  fullname              String?
-  familyname            String?
-  givenname             String?
-
-  @@ignore
-  @@schema("uk_version_0_4")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model person_recorddetails_nationalities {
-  link                  String? @map("_link")
-  link_person_statement String? @map("_link_person_statement")
-  name                  String?
-  code                  String?
-
-  @@ignore
-  @@schema("uk_version_0_4")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model person_recorddetails_taxresidencies {
-  link                  String? @map("_link")
-  link_person_statement String? @map("_link_person_statement")
-  name                  String?
-  code                  String?
-
-  @@ignore
   @@schema("uk_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model uk_version_0_4_person_source_assertedby {
-  link                  String? @map("_link")
-  link_person_statement String? @map("_link_person_statement")
+  link                  String                           @id @map("_link")
+  link_person_statement String?                          @map("_link_person_statement")
   name                  String?
   uri                   String?
+  person_statement      uk_version_0_4_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_source_assertedby")
 
+  @@index([link_person_statement], map: "idx_source_link_person")
   @@map("person_source_assertedby")
-  @@ignore
   @@schema("uk_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model uk_version_0_4_person_statement {
-  link                               String?   @map("_link")
-  statementid                        String?
-  declarationsubject                 String?
-  statementdate                      DateTime? @db.Timestamp(6)
-  recordid                           String?
-  recordstatus                       String?
-  recordtype                         String?
-  recorddetails_iscomponent          Boolean?
-  recorddetails_persontype           String?
-  recorddetails_birthdate            String?
-  publicationdetails_publicationdate DateTime? @db.Timestamp(6)
-  publicationdetails_bodsversion     Decimal?  @db.Decimal
-  publicationdetails_license         String?
-  publicationdetails_publisher_name  String?
-  publicationdetails_publisher_url   String?
-  source_type                        String?
-  source_url                         String?
+  link                                String                                               @id @unique(map: "person_statement_link_unique") @map("_link")
+  statementid                         String?
+  declarationsubject                  String?
+  statementdate                       DateTime?                                            @db.Timestamp(6)
+  recordid                            String?
+  recordstatus                        String?
+  recordtype                          String?
+  recorddetails_iscomponent           Boolean?
+  recorddetails_persontype            String?
+  recorddetails_birthdate             String?
+  publicationdetails_publicationdate  DateTime?                                            @db.Timestamp(6)
+  publicationdetails_bodsversion      Decimal?                                             @db.Decimal
+  publicationdetails_license          String?
+  publicationdetails_publisher_name   String?
+  publicationdetails_publisher_url    String?
+  source_type                         String?
+  source_url                          String?
+  person_annotations                  uk_version_0_4_person_annotations[]
+  person_recorddetails_addresses      uk_version_0_4_person_recorddetails_addresses[]
+  person_recorddetails_names          uk_version_0_4_person_recorddetails_names[]
+  person_recorddetails_nationalities  uk_version_0_4_person_recorddetails_nationalities[]
+  person_recorddetails_taxresidencies uk_version_0_4_person_recorddetails_taxresidencies[]
+  person_source_assertedby            uk_version_0_4_person_source_assertedby[]
 
+  @@index([statementid], map: "idx_person_statementid")
   @@map("person_statement")
-  @@ignore
   @@schema("uk_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model uk_version_0_4_relationship_annotations {
-  link                        String?   @map("_link")
-  link_relationship_statement String?   @map("_link_relationship_statement")
+  link                        String                                 @id @map("_link")
+  link_relationship_statement String?                                @map("_link_relationship_statement")
   motivation                  String?
   description                 String?
   statementpointertarget      Boolean?
-  creationdate                DateTime? @db.Timestamp(6)
+  creationdate                DateTime?                              @db.Timestamp(6)
   createdby_name              String?
   createdby_uri               String?
+  relationship_statement      uk_version_0_4_relationship_statement? @relation(fields: [link_relationship_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_relationship_statement_annotations")
 
+  @@index([link_relationship_statement], map: "idx_annotations_link_relationship")
   @@map("relationship_annotations")
-  @@ignore
   @@schema("uk_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model uk_version_0_4_relationship_recorddetails_interests {
-  link                         String?   @map("_link")
-  link_relationship_statement  String?   @map("_link_relationship_statement")
+  link                         String                                 @id @map("_link")
+  link_relationship_statement  String?                                @map("_link_relationship_statement")
   directorindirect             String?
   type                         String?
   beneficialownershiporcontrol Boolean?
-  startdate                    DateTime? @db.Timestamp(6)
+  startdate                    DateTime?                              @db.Timestamp(6)
   details                      String?
-  share_maximum                Decimal?  @db.Decimal
-  share_minimum                Decimal?  @db.Decimal
-  enddate                      DateTime? @db.Timestamp(6)
+  share_maximum                Decimal?                               @db.Decimal
+  share_minimum                Decimal?                               @db.Decimal
+  enddate                      DateTime?                              @db.Timestamp(6)
+  relationship_statement       uk_version_0_4_relationship_statement? @relation(fields: [link_relationship_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "relationship_statement_recorddetails_interests")
 
+  @@index([link_relationship_statement], map: "idx_interests_link_relationship")
   @@map("relationship_recorddetails_interests")
-  @@ignore
   @@schema("uk_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model uk_version_0_4_relationship_source_assertedby {
-  link                        String? @map("_link")
-  link_relationship_statement String? @map("_link_relationship_statement")
+  link                        String                                 @id @map("_link")
+  link_relationship_statement String?                                @map("_link_relationship_statement")
   name                        String?
   uri                         String?
+  relationship_statement      uk_version_0_4_relationship_statement? @relation(fields: [link_relationship_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "relationship_statement_source_assertedby")
 
+  @@index([link_relationship_statement], map: "idx_source_link_relationship")
   @@map("relationship_source_assertedby")
-  @@ignore
   @@schema("uk_version_0_4")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model uk_version_0_4_relationship_statement {
-  link                                      String?   @map("_link")
+  link                                      String                                                @id @map("_link")
   statementid                               String?
   declarationsubject                        String?
-  statementdate                             DateTime? @db.Timestamp(6)
+  statementdate                             DateTime?                                             @db.Timestamp(6)
   recordid                                  String?
   recordstatus                              String?
   recordtype                                String?
   recorddetails_subject                     String?
   recorddetails_interestedparty             String?
   recorddetails_iscomponent                 Boolean?
-  publicationdetails_publicationdate        DateTime? @db.Timestamp(6)
-  publicationdetails_bodsversion            Decimal?  @db.Decimal
+  publicationdetails_publicationdate        DateTime?                                             @db.Timestamp(6)
+  publicationdetails_bodsversion            Decimal?                                              @db.Decimal
   publicationdetails_license                String?
   publicationdetails_publisher_name         String?
   publicationdetails_publisher_url          String?
@@ -1020,8 +992,81 @@ model uk_version_0_4_relationship_statement {
   source_url                                String?
   recorddetails_interestedparty_reason      String?
   recorddetails_interestedparty_description String?
+  relationship_annotations                  uk_version_0_4_relationship_annotations[]
+  relationship_recorddetails_interests      uk_version_0_4_relationship_recorddetails_interests[]
+  relationship_source_assertedby            uk_version_0_4_relationship_source_assertedby[]
 
+  @@index([recorddetails_interestedparty], map: "idx_relationship_interestedparty")
+  @@index([recorddetails_subject], map: "idx_relationship_subject")
   @@map("relationship_statement")
-  @@ignore
+  @@schema("uk_version_0_4")
+}
+
+model uk_version_0_4_person_annotations {
+  link                   String                           @id @map("_link")
+  link_person_statement  String?                          @map("_link_person_statement")
+  motivation             String?
+  description            String?
+  statementpointertarget Boolean?
+  creationdate           DateTime?                        @db.Timestamp(6)
+  createdby_name         String?
+  createdby_uri          String?
+  person_statement       uk_version_0_4_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_annotations")
+
+  @@index([link_person_statement], map: "idx_annotations_link_person")
+  @@map("person_annotations")
+  @@schema("uk_version_0_4")
+}
+
+model uk_version_0_4_person_recorddetails_addresses {
+  link                  String                           @id @map("_link")
+  link_person_statement String?                          @map("_link_person_statement")
+  type                  String?
+  address               String?
+  postcode              String?
+  country_name          String?
+  country_code          String?
+  person_statement      uk_version_0_4_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_recorddetails_addresses")
+
+  @@index([link_person_statement], map: "idx_addresses_link_person")
+  @@map("person_recorddetails_addresses")
+  @@schema("uk_version_0_4")
+}
+
+model uk_version_0_4_person_recorddetails_names {
+  link                  String                           @id @map("_link")
+  link_person_statement String?                          @map("_link_person_statement")
+  type                  String?
+  fullname              String?
+  familyname            String?
+  givenname             String?
+  person_statement      uk_version_0_4_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_recorddetails_names")
+
+  @@index([fullname(ops: raw("gin_trgm_ops"))], map: "idx_names_fullname_gin", type: Gin)
+  @@map("person_recorddetails_names")
+  @@schema("uk_version_0_4")
+}
+
+model uk_version_0_4_person_recorddetails_nationalities {
+  link                  String                           @id @map("_link")
+  link_person_statement String?                          @map("_link_person_statement")
+  name                  String?
+  code                  String?
+  person_statement      uk_version_0_4_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_recorddetails_nationalities")
+
+  @@index([link_person_statement], map: "idx_nationalities_link_person")
+  @@map("person_recorddetails_nationalities")
+  @@schema("uk_version_0_4")
+}
+
+model uk_version_0_4_person_recorddetails_taxresidencies {
+  link                  String                           @id @map("_link")
+  link_person_statement String?                          @map("_link_person_statement")
+  name                  String?
+  code                  String?
+  person_statement      uk_version_0_4_person_statement? @relation(fields: [link_person_statement], references: [link], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_statement_recorddetails_taxresidencies")
+
+  @@index([link_person_statement], map: "idx_taxresidencies_link_person")
+  @@map("person_recorddetails_taxresidencies")
   @@schema("uk_version_0_4")
 }
